@@ -54,6 +54,100 @@
             --modal-bg: rgba(30, 30, 30, 0.95);
         }
 
+        /* MIDNIGHT — preto + azul elétrico */
+        body.theme-midnight {
+            --bg-glass: rgba(255, 255, 255, 0.06);
+            --border-glass: rgba(100, 180, 255, 0.2);
+            --text-color: #e8f4ff;
+            --accent-color: #4FC3F7;
+            --bg-gradient: linear-gradient(160deg, #0a0e1a, #040810);
+            --panel-bg: rgba(8, 14, 30, 0.98);
+            --input-bg: rgba(79, 195, 247, 0.08);
+            --card-bg: rgba(79, 195, 247, 0.04);
+            --modal-bg: rgba(10, 18, 40, 0.97);
+        }
+
+        /* AMOLED — preto absoluto */
+        body.theme-amoled {
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-color: #ffffff;
+            --accent-color: #ffffff;
+            --bg-gradient: #000000;
+            --panel-bg: rgba(5, 5, 5, 0.99);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --modal-bg: rgba(0, 0, 0, 0.99);
+        }
+
+        /* FOREST — verdes escuros */
+        body.theme-forest {
+            --bg-glass: rgba(255, 255, 255, 0.07);
+            --border-glass: rgba(100, 200, 120, 0.2);
+            --text-color: #e8f5e9;
+            --accent-color: #66BB6A;
+            --bg-gradient: linear-gradient(160deg, #0d1f0f, #071209);
+            --panel-bg: rgba(10, 24, 12, 0.98);
+            --input-bg: rgba(102, 187, 106, 0.08);
+            --card-bg: rgba(102, 187, 106, 0.04);
+            --modal-bg: rgba(12, 28, 14, 0.97);
+        }
+
+        /* SUNSET — laranja/roxo */
+        body.theme-sunset {
+            --bg-glass: rgba(255, 255, 255, 0.07);
+            --border-glass: rgba(255, 140, 80, 0.25);
+            --text-color: #fff0e8;
+            --accent-color: #FF7043;
+            --bg-gradient: linear-gradient(160deg, #1a0a1e, #2d0f08);
+            --panel-bg: rgba(28, 10, 20, 0.98);
+            --input-bg: rgba(255, 112, 67, 0.08);
+            --card-bg: rgba(255, 112, 67, 0.04);
+            --modal-bg: rgba(32, 12, 22, 0.97);
+        }
+
+        /* OCEAN — azuis profundos */
+        body.theme-ocean {
+            --bg-glass: rgba(255, 255, 255, 0.07);
+            --border-glass: rgba(0, 230, 230, 0.2);
+            --text-color: #e0f7fa;
+            --accent-color: #00BCD4;
+            --bg-gradient: linear-gradient(160deg, #020e1a, #000d1f);
+            --panel-bg: rgba(2, 18, 35, 0.98);
+            --input-bg: rgba(0, 188, 212, 0.08);
+            --card-bg: rgba(0, 188, 212, 0.04);
+            --modal-bg: rgba(3, 20, 40, 0.97);
+        }
+
+        /* SEPIA — tons quentes bege */
+        body.theme-sepia {
+            --bg-glass: rgba(0, 0, 0, 0.06);
+            --border-glass: rgba(150, 100, 50, 0.2);
+            --text-color: #3d2b1a;
+            --accent-color: #8D6E63;
+            --danger-color: #c0392b;
+            --success-color: #27ae60;
+            --warning-color: #d35400;
+            --bg-gradient: linear-gradient(135deg, #f5e6d0, #ecdcc0);
+            --panel-bg: rgba(245, 230, 208, 0.97);
+            --input-bg: rgba(141, 110, 99, 0.1);
+            --card-bg: rgba(141, 110, 99, 0.05);
+            --modal-bg: rgba(250, 240, 220, 0.98);
+        }
+
+        /* NORD — azul-acinzentado */
+        body.theme-nord {
+            --bg-glass: rgba(255, 255, 255, 0.07);
+            --border-glass: rgba(136, 192, 208, 0.2);
+            --text-color: #ECEFF4;
+            --accent-color: #88C0D0;
+            --bg-gradient: linear-gradient(160deg, #1e2430, #161c27);
+            --panel-bg: rgba(28, 34, 46, 0.98);
+            --input-bg: rgba(136, 192, 208, 0.08);
+            --card-bg: rgba(136, 192, 208, 0.04);
+            --modal-bg: rgba(32, 40, 56, 0.97);
+        }
+
         /* --- MODO FOCO EXTREMO --- */
         body.extreme-mode {
             --bg-gradient: #000000 !important;
@@ -100,18 +194,7 @@
             transform: scale(0.85);
         }
 
-        #floating-timer.windowed {
-            position: fixed; width: 280px; height: 440px;
-            background: var(--panel-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 2px solid var(--task-accent); border-radius: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); touch-action: none;
-            transition: all 0.4s cubic-bezier(0.32, 1.15, 0.25, 1);
-        }
-
-        .handle { height: 35px; width: 100%; display: none; justify-content: center; align-items: center; cursor: move; flex-shrink: 0; transition: opacity 0.3s; }
-        #floating-timer.windowed .handle { display: flex; }
-        .handle::after { content: ''; width: 35px; height: 4px; background: var(--text-color); border-radius: 10px; opacity: 0.2; transition: opacity 0.3s; }
-        .handle:active::after { opacity: 0.5; }
+        .handle { display: none; }
 
         .top-right-btns { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; transition: opacity 0.4s ease, transform 0.4s ease; }
         @media (max-width: 600px) {
@@ -131,9 +214,10 @@
         .icon-btn { background: var(--bg-glass); border: 1px solid var(--border-glass); color: var(--text-color); cursor: pointer; padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
         .icon-btn.active-focus { background: var(--task-accent); color: white; border-color: transparent; }
 
-        .mode-selector { display: flex; justify-content: center; gap: 10px; padding: 20px; background: rgba(0,0,0,0.05); flex-shrink: 0; z-index: 90; transition: opacity 0.4s ease, transform 0.4s ease; }
-        .mode-item { opacity: 0.5; cursor: pointer; padding: 8px 12px; font-size: 0.7rem; font-weight: 800; border-radius: 12px; color: var(--text-color); }
-        .mode-item.active { opacity: 1; color: white; background: var(--task-accent); transform: scale(1.05); }
+        .mode-selector { display: flex; justify-content: center; gap: 10px; padding: 20px; background: rgba(0,0,0,0.05); flex-shrink: 0; z-index: 90; transition: opacity 0.4s ease, transform 0.4s ease; position: relative; }
+        .mode-item { opacity: 0.5; cursor: pointer; padding: 8px 12px; font-size: 0.7rem; font-weight: 800; border-radius: 12px; color: var(--text-color); position: relative; z-index: 2; transition: opacity 0.25s, color 0.25s; user-select: none; }
+        .mode-item.active { opacity: 1; color: white; }
+        #tab-indicator { position: absolute; background: var(--task-accent); border-radius: 12px; z-index: 1; pointer-events: none; transition: none; }
 
         .content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .task-label { font-size: 1.1rem; font-weight: 800; color: var(--task-accent); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, letter-spacing 0.4s ease; }
@@ -149,9 +233,7 @@
             will-change: transform, color;
         }
         .timer-display:active { transform: scale(0.96); }
-        #floating-timer.windowed .timer-display { font-size: 4.5rem; }
         .centiseconds { font-size: 0.4em; opacity: 0.3; font-weight: 500; }
-        #floating-timer.windowed .centiseconds { display: none; }
         .status-notification { font-size: 0.85rem; font-weight: 600; height: 20px; margin-bottom: 15px; opacity: 0.7; transition: opacity 0.4s ease, transform 0.4s ease; }
 
         @keyframes pulse-urgent {
@@ -162,10 +244,8 @@
         .time-urgent { animation: pulse-urgent 1s infinite cubic-bezier(0.4, 0, 0.2, 1); color: var(--danger-color) !important; }
 
         .controls { display: flex; justify-content: center; align-items: center; gap: 25px; padding-bottom: 40px; flex-shrink: 0; }
-        #floating-timer.windowed .controls { padding-bottom: 25px; gap: 15px; }
 
         .btn { background: var(--bg-glass); border: 1px solid var(--border-glass); color: var(--text-color); border-radius: 50%; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.4s ease, transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1); }
-        #floating-timer.windowed .btn { width: 55px; height: 55px; }
         .btn svg { width: 40%; height: 40%; transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1); }
         .btn-play { background: var(--task-accent); color: white; border: none; }
         .btn-play svg { width: 45%; height: 45%; }
@@ -308,6 +388,90 @@
             .hud-actions { padding-left: 10px; gap: 5px; }
             .hud-btn { width: 36px; height: 36px; }
         }
+
+        .hud-progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .hud-progress-bar { height: 100%; background: var(--task-accent); border-radius: 3px; transition: width 1s linear; }
+
+        /* Gráfico semanal */
+        .week-chart { width:100%; background:var(--card-bg); border:1px solid var(--border-glass); border-radius:16px; padding:16px 12px 8px; margin-bottom:15px; }
+        .week-bars { display:flex; align-items:flex-end; justify-content:space-between; height:80px; gap:4px; }
+        .week-bar-wrap { display:flex; flex-direction:column; align-items:center; flex:1; gap:4px; }
+        .week-bar-val { font-size:0.6rem; font-weight:800; opacity:0.7; min-height:12px; }
+        .week-bar { width:100%; border-radius:6px 6px 0 0; background:var(--task-accent); opacity:0.5; transition:height 0.6s cubic-bezier(0.34,1.2,0.64,1), opacity 0.3s; min-height:3px; }
+        .week-bar.today { opacity:1; }
+        .week-bar.empty { opacity:0.15; }
+        .week-day { font-size:0.62rem; font-weight:800; opacity:0.5; text-transform:uppercase; }
+        .week-day.today { opacity:1; color:var(--task-accent); }
+
+        /* Histórico */
+        .history-item { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--card-bg); border:1px solid var(--border-glass); border-radius:14px; margin-bottom:8px; }
+        .history-item-left { display:flex; flex-direction:column; gap:3px; }
+        .history-item-name { font-size:0.85rem; font-weight:800; }
+        .history-item-meta { font-size:0.72rem; opacity:0.6; font-weight:600; }
+        .history-item-dur { font-size:1rem; font-weight:900; color:var(--task-accent); }
+        .history-empty { text-align:center; opacity:0.4; font-size:0.85rem; padding:20px 0; }
+
+        /* Modal nome sessão */
+        #session-name-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:9999; display:none; align-items:center; justify-content:center; padding:20px; }
+        #session-name-overlay.show { display:flex; }
+        #session-name-box { background:var(--modal-bg); border:1px solid var(--border-glass); border-radius:28px; padding:30px; width:100%; max-width:320px; display:flex; flex-direction:column; gap:14px; animation: popIn 0.4s cubic-bezier(0.34,1.2,0.64,1) forwards; }
+        #session-name-input { width:100%; padding:14px; background:var(--input-bg); border:1px solid var(--border-glass); border-radius:14px; color:var(--text-color); font-size:1rem; font-weight:700; outline:none; font-family:inherit; transition:border-color 0.3s; }
+        #session-name-input:focus { border-color:var(--task-accent); }
+        .goal-ring-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; }
+        .goal-ring-svg { transform: rotate(-90deg); }
+        .goal-ring-bg { fill: none; stroke: var(--input-bg); stroke-width: 8; }
+        .goal-ring-progress { fill: none; stroke: var(--success-color); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.2, 0.64, 1); }
+        .goal-ring-progress.complete { stroke: var(--warning-color); }
+        .goal-ring-center { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .goal-ring-pct { font-size: 1.6rem; font-weight: 900; }
+        .goal-ring-lbl { font-size: 0.65rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
+        .goal-ring-container { position: relative; display: flex; align-items: center; justify-content: center; width: 120px; height: 120px; }
+
+        /* Celebração */
+        @keyframes celebrateIn { 0% { transform: translate(-50%,-50%) scale(0.5); opacity:0; } 70% { transform: translate(-50%,-50%) scale(1.1); } 100% { transform: translate(-50%,-50%) scale(1); opacity:1; } }
+        #celebrate-overlay { position: fixed; inset: 0; z-index: 9000; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); }
+        #celebrate-overlay.show { display: flex; }
+        #celebrate-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--modal-bg); border: 2px solid var(--warning-color); border-radius: 32px; padding: 40px 30px; text-align: center; width: 280px; animation: celebrateIn 0.5s cubic-bezier(0.34,1.2,0.64,1) forwards; }
+        .celebrate-emoji { font-size: 3.5rem; display: block; margin-bottom: 10px; }
+        .celebrate-title { font-size: 1.3rem; font-weight: 900; color: var(--warning-color); margin-bottom: 8px; }
+        .celebrate-sub { font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px; }
+
+        .omniscient-toggle-row { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border-glass); margin-bottom: 10px; cursor: pointer; transition: border-color 0.3s; }
+        .omniscient-toggle-row.active { border-color: var(--task-accent); }
+        .omniscient-toggle-info { display: flex; flex-direction: column; gap: 3px; }
+        .omniscient-toggle-title { font-size: 0.9rem; font-weight: 800; }
+        .omniscient-toggle-desc { font-size: 0.72rem; opacity: 0.6; font-weight: 600; }
+        .omniscient-badge { font-size: 0.7rem; font-weight: 900; padding: 5px 12px; border-radius: 20px; letter-spacing: 0.5px; background: var(--input-bg); color: var(--text-color); transition: background 0.3s, color 0.3s; }
+        .omniscient-badge.on { background: var(--task-accent); color: white; }
+
+        /* POMODORO BOTTOM SHEET */
+        #pomo-sheet {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: var(--panel-bg);
+            border-radius: 24px 24px 0 0;
+            padding: 0 20px 30px;
+            z-index: 500;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 1.15, 0.25, 1);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-top: 1px solid var(--border-glass);
+            max-height: 85%; overflow-y: auto;
+        }
+        #pomo-sheet.open { transform: translateY(0); }
+        .pomo-sheet-handle { width: 36px; height: 4px; background: var(--border-glass); border-radius: 4px; margin: 12px auto 16px; cursor: grab; }
+        #pomo-sheet-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 499; display: none; border-radius: inherit; }
+        #pomo-sheet-overlay.show { display: block; }
+        #pomo-swipe-hint { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); display: none; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; }
+        #pomo-swipe-hint.show { display: flex; animation: hintFade 2.5s ease-in-out forwards; }
+        @keyframes hintFade { 0%,100% { opacity:0; transform: translateX(-50%) translateY(0); } 30%,70% { opacity:0.7; transform: translateX(-50%) translateY(-8px); } }
+        .pomo-swipe-arrow { font-size: 1.4rem; }
+        .pomo-swipe-label { font-size: 0.62rem; font-weight: 800; opacity: 0.5; letter-spacing: 1.5px; }
+
+        /* THEME DOTS */
+        .theme-dots { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+        .theme-dot { width:30px; height:30px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:transform 0.2s cubic-bezier(0.34,1.2,0.64,1), border-color 0.2s; flex-shrink:0; }
+        .theme-dot:active { transform: scale(0.88); }
+        .theme-dot.active { border-color: var(--text-color); transform: scale(1.15); }
     </style>
 </head>
 <body class="theme-dark">
@@ -337,7 +501,8 @@
 
         <div class="handle" id="drag-handle"></div>
 
-        <div class="mode-selector">
+        <div class="mode-selector" id="mode-selector">
+            <div id="tab-indicator"></div>
             <div class="mode-item active" onclick="setMode('chrono')">CRONO</div>
             <div class="mode-item" onclick="setMode('countdown')">REGRESS</div>
             <div class="mode-item" onclick="setMode('pomodoro')">POMO</div>
@@ -361,6 +526,44 @@
             </div>
         </div>
 
+        <!-- Swipe hint — só visível no modo pomodoro -->
+        <div id="pomo-swipe-hint">
+            <span class="pomo-swipe-arrow">⌃</span>
+            <span class="pomo-swipe-label">CONFIGURAR</span>
+        </div>
+
+        <!-- Overlay escurecedor do bottom sheet -->
+        <div id="pomo-sheet-overlay" onclick="closePomoSheet()"></div>
+
+        <!-- Bottom Sheet Pomodoro -->
+        <div id="pomo-sheet">
+            <div class="pomo-sheet-handle" id="pomo-sheet-handle"></div>
+            <div style="font-weight:900; font-size:0.9rem; letter-spacing:1px; margin-bottom:16px;">⏱️ CONFIGURAR POMODORO</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🔥 Foco (min)</span>
+                    <input type="number" id="pomo-sheet-work" min="1" max="120" value="25" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:56px;" oninput="updatePomoSheetPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">☕ Pausa curta (min)</span>
+                    <input type="number" id="pomo-sheet-break" min="1" max="60" value="5" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:56px;" oninput="updatePomoSheetPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🛋️ Pausa longa (min)</span>
+                    <input type="number" id="pomo-sheet-longbreak" min="1" max="120" value="15" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:56px;" oninput="updatePomoSheetPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🔄 Ciclos p/ pausa longa</span>
+                    <input type="number" id="pomo-sheet-cycles" min="1" max="10" value="4" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:56px;" oninput="updatePomoSheetPreview()">
+                </div>
+            </div>
+            <div style="background:var(--card-bg); border:1px solid var(--border-glass); border-radius:14px; padding:12px 14px; margin-bottom:14px; font-size:0.8rem; opacity:0.8; line-height:1.6;">
+                🔥 <b id="pomo-sheet-preview-work">25</b>min foco → ☕ <b id="pomo-sheet-preview-break">5</b>min pausa → repete <b id="pomo-sheet-preview-cycles">4</b>x → 🛋️ <b id="pomo-sheet-preview-longbreak">15</b>min pausa longa
+            </div>
+            <button class="btn-action" style="background:var(--danger-color); color:white; margin-bottom:8px;" onclick="savePomoSheet()">APLICAR</button>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color);" onclick="closePomoSheet()">FECHAR</button>
+        </div>
+
         <div class="finish-modal" id="finish-modal">
             <h2 style="margin-bottom: 15px;">⏰ Tempo Finalizado!</h2>
             <button class="btn-ok btn-action" style="background:var(--task-accent); color:white;" onclick="closeFinishModal()">OK</button>
@@ -380,7 +583,14 @@
                 <button class="btn-action" style="background:var(--task-accent); color:white; height: 45px; font-size:0.8rem;" onclick="toggleTimer(); closeAllPanels();">Start / Pause</button>
                 <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="resetTimer(); closeAllPanels();">Resetar</button>
                 <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="toggleExtremeFocus(); closeAllPanels();">Foco Extremo</button>
-                <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="toggleOmniscientFocus(); closeAllPanels();">Modo HUD</button>
+            </div>
+
+            <div class="omniscient-toggle-row" id="omniscient-row" onclick="toggleOmniscientFocus()">
+                <div class="omniscient-toggle-info">
+                    <span class="omniscient-toggle-title">👁️ Modo Omnisciente</span>
+                    <span class="omniscient-toggle-desc">HUD automático ao sair do app</span>
+                </div>
+                <span class="omniscient-badge" id="omniscient-badge">OFF</span>
             </div>
 
             <div class="setting-label">NAVEGAÇÃO</div>
@@ -389,21 +599,38 @@
                 <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleProfilesPanel()">Perfis</button>
                 <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleSoundPanel()">Sons</button>
                 <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleTaskEditor()">Tarefas</button>
-                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleWindowMode(); closeAllPanels();">Janela</button>
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="togglePomodoroPanel()">Pomodoro</button>
             </div>
 
             <div class="setting-label">APARÊNCIA</div>
             <div class="setting-item" style="background:var(--card-bg); padding:15px; border-radius:16px; border:1px solid var(--border-glass); margin-bottom: 10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <span style="font-size:0.85rem; font-weight:700;">Tema Visual</span>
-                    <select id="theme-select" onchange="updateTheme(this.value)" style="padding:8px 12px; border-radius:10px; background:var(--input-bg); color:var(--text-color); border:1px solid var(--border-glass); outline:none; font-weight:bold;">
-                        <option value="theme-dark">Deep Dark</option>
-                        <option value="theme-light">Pure Light</option>
-                    </select>
+                    <span id="theme-name-label" style="font-size:0.75rem; font-weight:800; opacity:0.6;">Deep Dark</span>
+                </div>
+                <div class="theme-dots" id="theme-dots">
+                    <div class="theme-dot active" data-theme="theme-dark"     style="background:radial-gradient(circle at 30% 30%, #2c2c2e, #000);" title="Deep Dark" onclick="updateTheme('theme-dark')"></div>
+                    <div class="theme-dot"        data-theme="theme-light"    style="background:linear-gradient(135deg,#f2f2f7,#e5e5ea);" title="Pure Light" onclick="updateTheme('theme-light')"></div>
+                    <div class="theme-dot"        data-theme="theme-midnight" style="background:linear-gradient(135deg,#0a0e1a,#4FC3F7);" title="Midnight" onclick="updateTheme('theme-midnight')"></div>
+                    <div class="theme-dot"        data-theme="theme-amoled"   style="background:#000; border:2px solid #333;" title="AMOLED" onclick="updateTheme('theme-amoled')"></div>
+                    <div class="theme-dot"        data-theme="theme-forest"   style="background:linear-gradient(135deg,#0d1f0f,#66BB6A);" title="Forest" onclick="updateTheme('theme-forest')"></div>
+                    <div class="theme-dot"        data-theme="theme-sunset"   style="background:linear-gradient(135deg,#1a0a1e,#FF7043);" title="Sunset" onclick="updateTheme('theme-sunset')"></div>
+                    <div class="theme-dot"        data-theme="theme-ocean"    style="background:linear-gradient(135deg,#020e1a,#00BCD4);" title="Ocean" onclick="updateTheme('theme-ocean')"></div>
+                    <div class="theme-dot"        data-theme="theme-sepia"    style="background:linear-gradient(135deg,#f5e6d0,#8D6E63);" title="Sepia" onclick="updateTheme('theme-sepia')"></div>
+                    <div class="theme-dot"        data-theme="theme-nord"     style="background:linear-gradient(135deg,#1e2430,#88C0D0);" title="Nord" onclick="updateTheme('theme-nord')"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; margin-bottom:10px;">
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                        <span style="font-size:0.85rem; font-weight:700;">Opacidade no Omnisciente</span>
+                        <span style="font-size:0.72rem; opacity:0.6; font-weight:600;">Reduz opacidade ao rodar no modo HUD</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-auto-opacity" onchange="toggleAutoOpacity(this.checked)">
+                        <span class="slider"></span>
+                    </label>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <span style="font-size:0.85rem; font-weight:700;">Opacidade: <span id="opacity-val">100</span>%</span>
-                    <button class="icon-btn" id="btn-auto-opacity" style="background:none; border:none; color:var(--task-accent); font-weight:900; font-size:0.8rem; padding:0;" onclick="toggleAutoOpacity()">AUTO: ON</button>
                 </div>
                 <input type="range" id="opacity-slider" min="10" max="100" value="100" oninput="manualUpdateOpacity(this.value)" style="width:100%;">
             </div>
@@ -411,23 +638,81 @@
 
         <!-- Painel Estatísticas (Gamificação) -->
         <div class="overlay-panel" id="stats-panel">
-            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <span>SEU PROGRESSO</span>
             </div>
+
+            <!-- Anel de meta diária -->
+            <div class="goal-ring-wrap">
+                <div class="goal-ring-container">
+                    <svg class="goal-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+                        <circle class="goal-ring-bg" cx="60" cy="60" r="52"/>
+                        <circle class="goal-ring-progress" id="goal-ring-progress" cx="60" cy="60" r="52"
+                            stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+                    </svg>
+                    <div class="goal-ring-center">
+                        <span class="goal-ring-pct" id="goal-ring-pct">0%</span>
+                        <span class="goal-ring-lbl">META</span>
+                    </div>
+                </div>
+                <div style="margin-top:10px; font-size:0.8rem; opacity:0.7;" id="goal-ring-detail">0 / 0 min hoje</div>
+                <!-- Configurar meta -->
+                <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
+                    <span style="font-size:0.8rem; font-weight:700; opacity:0.7;">Meta:</span>
+                    <input type="number" id="goal-input" min="10" max="720" value="120" style="width:70px; padding:6px 10px; background:var(--input-bg); border:1px solid var(--border-glass); border-radius:10px; color:var(--text-color); font-weight:900; font-size:0.9rem; text-align:center; outline:none;">
+                    <span style="font-size:0.8rem; opacity:0.7;">min/dia</span>
+                    <button class="btn-action" style="height:34px; padding:0 14px; background:var(--task-accent); color:white; font-size:0.75rem; border-radius:10px;" onclick="saveGoal()">OK</button>
+                </div>
+            </div>
+
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 15px;">
                 <div class="stat-card">
                     <span class="stat-val" id="stat-sessions">0</span>
                     <span class="stat-lbl">Sessões<br>Concluídas</span>
                 </div>
+            </div>
+
+            <div class="setting-label" style="margin-bottom:8px;">OFENSIVA POR MODO 🔥</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;">
                 <div class="stat-card">
-                    <span class="stat-val" id="stat-streak" style="color:var(--warning-color);">0</span>
-                    <span class="stat-lbl">Dias de<br>Ofensiva 🔥</span>
+                    <span class="stat-val" id="streak-countdown" style="color:var(--accent-color);">0</span>
+                    <span class="stat-lbl">⏳ Regressivo</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val" id="streak-pomodoro" style="color:var(--danger-color);">0</span>
+                    <span class="stat-lbl">🍅 Pomodoro</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val" id="streak-tasks" style="color:var(--success-color);">0</span>
+                    <span class="stat-lbl">✅ Tarefas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val" id="streak-chrono" style="color:var(--warning-color);">0</span>
+                    <span class="stat-lbl">⏱ Cronómetro</span>
                 </div>
             </div>
             <div class="stat-card" style="margin-bottom: 5px;">
                 <span class="stat-val" id="stat-time" style="color:var(--success-color);">0h 0m</span>
                 <span class="stat-lbl">Tempo Total em Foco (Todos Modos)</span>
             </div>
+
+            <!-- Gráfico semanal -->
+            <div class="setting-label" style="margin-bottom:8px;">FOCO SEMANAL</div>
+            <div class="week-chart">
+                <div class="week-bars" id="week-bars"></div>
+            </div>
+
+            <!-- Histórico -->
+            <div style="margin-top:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span class="setting-label">HISTÓRICO</span>
+                    <button onclick="clearHistory()" style="background:none; border:none; color:var(--danger-color); font-size:0.75rem; font-weight:800; cursor:pointer;">LIMPAR</button>
+                </div>
+                <div id="history-list" style="max-height:200px; overflow-y:auto;">
+                    <div class="history-empty">Sem sessões registadas</div>
+                </div>
+            </div>
+
             <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); margin-top: 10px;" onclick="toggleControlHub()">VOLTAR AO MENU</button>
         </div>
 
@@ -485,11 +770,66 @@
             <button class="btn-action" style="background:var(--task-accent); color:white;" onclick="applyQuickEdit()">APLICAR</button>
         </div>
 
+        <!-- Painel Configuração Pomodoro -->
+        <div class="overlay-panel" id="pomodoro-panel">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span>⏱️ CONFIGURAR POMODORO</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🔥 Foco (min)</span>
+                    <input type="number" id="pomo-work" min="1" max="120" value="25" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:60px;" oninput="updatePomodoroPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">☕ Pausa curta (min)</span>
+                    <input type="number" id="pomo-break" min="1" max="60" value="5" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:60px;" oninput="updatePomodoroPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🛋️ Pausa longa (min)</span>
+                    <input type="number" id="pomo-longbreak" min="1" max="120" value="15" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:60px;" oninput="updatePomodoroPreview()">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <span class="setting-label">🔄 Ciclos p/ pausa longa</span>
+                    <input type="number" id="pomo-cycles" min="1" max="10" value="4" class="prof-input" style="text-align:center; font-size:1.4rem; font-weight:900; height:60px;" oninput="updatePomodoroPreview()">
+                </div>
+            </div>
+
+            <div style="background:var(--card-bg); border:1px solid var(--border-glass); border-radius:16px; padding:14px; margin-bottom:15px; font-size:0.8rem; opacity:0.8; line-height:1.6;">
+                🔥 <b id="pomo-preview-work">25</b>min foco → ☕ <b id="pomo-preview-break">5</b>min pausa → repete <b id="pomo-preview-cycles">4</b>x → 🛋️ <b id="pomo-preview-longbreak">15</b>min pausa longa
+            </div>
+
+            <button class="btn-action" style="background:var(--task-accent); color:white; margin-bottom:10px;" onclick="savePomodoroSettings()">APLICAR</button>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color);" onclick="toggleControlHub()">VOLTAR AO MENU</button>
+        </div>
+
         <div id="confirm-clear" class="confirm-overlay">
             <div class="confirm-box">
                 <h2 style="margin-bottom: 20px;">APAGAR LISTA?</h2>
                 <div style="display:flex; gap:10px;"><button class="btn-action" style="flex:1; background:var(--danger-color); color:white;" onclick="confirmClear(true)">SIM</button><button class="btn-action" style="flex:1; background:var(--input-bg); color:var(--text-color);" onclick="confirmClear(false)">NÃO</button></div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOME SESSÃO -->
+    <div id="session-name-overlay">
+        <div id="session-name-box">
+            <div style="font-weight:900; font-size:1rem; letter-spacing:1px;">🎯 O QUE VAS FAZER?</div>
+            <input type="text" id="session-name-input" placeholder="Ex: Estudar React, Treino..." maxlength="40">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action" style="flex:1; background:var(--task-accent); color:white; height:48px;" onclick="confirmSessionName()">INICIAR</button>
+                <button class="btn-action" style="flex:1; background:var(--input-bg); color:var(--text-color); height:48px;" onclick="skipSessionName()">SALTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CELEBRAÇÃO META DIÁRIA -->
+    <div id="celebrate-overlay">
+        <div id="celebrate-box">
+            <span class="celebrate-emoji">🏆</span>
+            <div class="celebrate-title">META ATINGIDA!</div>
+            <div class="celebrate-sub" id="celebrate-sub">Completaste o teu objetivo de foco hoje.</div>
+            <button class="btn-action" style="background:var(--warning-color); color:white;" onclick="closeCelebration()">CONTINUAR 💪</button>
         </div>
     </div>
 
@@ -499,6 +839,9 @@
             <span id="hud-label" class="hud-label">MODO</span>
             <span id="hud-time" class="hud-time">00:00</span>
             <span id="hud-sub" class="hud-sub">Status</span>
+            <div class="hud-progress-wrap" id="hud-progress-wrap" style="display:none;">
+                <div class="hud-progress-bar" id="hud-progress-bar" style="width:100%;"></div>
+            </div>
         </div>
         <div class="hud-actions">
             <button class="hud-btn hud-play" id="hud-btn-play" onclick="toggleTimer()">
@@ -507,7 +850,7 @@
             <button class="hud-btn" onclick="restoreFromHUD()" title="Expandir App">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
             </button>
-            <button class="hud-btn hud-exit" onclick="exitFocusModeHUD()" title="Sair do Focus Mode">
+            <button class="hud-btn hud-exit" onclick="exitFocusModeHUD()" title="Desativar Omnisciente">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
@@ -520,10 +863,10 @@
             mode: 'chrono', extremeFocus: false,
             focusModeEnabled: false, hudActive: false, finishQueue: [],
             theme: 'theme-dark', tasks: [],
-            isWindowed: false, top: '100px', left: '100px', opacity: 100,
+            opacity: 100,
             autoOpacityEnabled: true, mute30s: false, mute10s: false, muteEnd: false,
             
-            pomodoroSettings: { work: 25, break: 5 },
+            pomodoroSettings: { work: 25, break: 5, longBreak: 15, cyclesBeforeLong: 4 },
             
             profiles: [
                 { id: 'p_study', name: '📚 Estudo Focado', type: 'pomodoro', data: { work: 25, break: 5 } },
@@ -533,14 +876,24 @@
 
             timers: {
                 chrono: { elapsedTime: 0, status: 'stopped' },
-                countdown: { elapsedTime: 0, status: 'stopped' },
-                pomodoro: { elapsedTime: 0, status: 'stopped', phase: 'work' },
+                countdown: { elapsedTime: 0, status: 'stopped', totalDuration: 0 },
+                pomodoro: { elapsedTime: 0, status: 'stopped', phase: 'work', cycleCount: 0 },
                 tasks: { elapsedTime: 0, status: 'stopped', index: 0 }
             },
 
             stats: {
-                sessionsCompleted: 0, totalFocusTime: 0, streak: 0, lastDate: null
-            }
+                sessionsCompleted: 0, totalFocusTime: 0,
+                streaks: {
+                    chrono:    { count: 0, lastDate: null },
+                    countdown: { count: 0, lastDate: null },
+                    pomodoro:  { count: 0, lastDate: null },
+                    tasks:     { count: 0, lastDate: null }
+                },
+                dailyGoalMinutes: 120, dailyFocusToday: 0, dailyGoalDate: null, goalCelebrated: false,
+                weeklyData: {} // { 'Mon Apr 21 2025': 3600000, ... }
+            },
+            history: [],
+            currentSessionName: ''
         };
 
         const PWAManager = {
@@ -559,7 +912,12 @@
 
         const NotificationManager = {
             instances: {}, lastContent: {},
-            async init() { if ("Notification" in window) { const permission = await Notification.requestPermission(); if (permission === 'granted') UIController.showToast("Notificações Ativas 🔔"); } },
+            init() { 
+                // Permissão só é pedida ao ativar o Modo Omnisciente — não no arranque
+                if ("Notification" in window && Notification.permission === 'granted') {
+                    UIController.showToast("Notificações Ativas 🔔");
+                }
+            },
             updateSystem() {
                 if (!("Notification" in window) || Notification.permission !== 'granted') return;
                 Object.keys(state.timers).forEach(mode => {
@@ -592,12 +950,22 @@
 
         const SoundEngine = {
             ctx: null, ensureInit() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); },
+            vibrate(pattern) { if ('vibrate' in navigator) navigator.vibrate(pattern); },
             play(type, isTest = false) {
                 if (!isTest) { if (type === '30s' && state.mute30s) return; if (type === '10s' && state.mute10s) return; if (type === 'end' && state.muteEnd) return; }
                 this.ensureInit(); const now = this.ctx.currentTime, ctx = this.ctx;
-                if (type === '30s') { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(523.25, now); o.frequency.exponentialRampToValueAtTime(261.63, now + 0.15); g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(0.2, now + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + 0.3); o.connect(g); g.connect(ctx.destination); o.start(); o.stop(now + 0.3); } 
-                else if (type === '10s') { [0, 0.1].forEach(d => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(1567, now + d); g.gain.setValueAtTime(0, now + d); g.gain.linearRampToValueAtTime(0.1, now + d + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + d + 0.2); o.connect(g); g.connect(ctx.destination); o.start(now+d); o.stop(now+d+0.2); }); } 
-                else if (type === 'end') { [523, 659, 783].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(f, now + i*0.1); g.gain.setValueAtTime(0, now + i*0.1); g.gain.linearRampToValueAtTime(0.2, now + i*0.1 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.1 + 0.5); o.connect(g); g.connect(ctx.destination); o.start(now+i*0.1); o.stop(now+i*0.1+0.5); }); }
+                if (type === '30s') { 
+                    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(523.25, now); o.frequency.exponentialRampToValueAtTime(261.63, now + 0.15); g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(0.2, now + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + 0.3); o.connect(g); g.connect(ctx.destination); o.start(); o.stop(now + 0.3);
+                    this.vibrate([100]);
+                } 
+                else if (type === '10s') { 
+                    [0, 0.1].forEach(d => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(1567, now + d); g.gain.setValueAtTime(0, now + d); g.gain.linearRampToValueAtTime(0.1, now + d + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + d + 0.2); o.connect(g); g.connect(ctx.destination); o.start(now+d); o.stop(now+d+0.2); });
+                    this.vibrate([80, 60, 80]);
+                } 
+                else if (type === 'end') { 
+                    [523, 659, 783].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(f, now + i*0.1); g.gain.setValueAtTime(0, now + i*0.1); g.gain.linearRampToValueAtTime(0.2, now + i*0.1 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.1 + 0.5); o.connect(g); g.connect(ctx.destination); o.start(now+i*0.1); o.stop(now+i*0.1+0.5); });
+                    this.vibrate([200, 100, 200, 100, 400]);
+                }
             }
         };
 
@@ -619,7 +987,7 @@
                 const m = String(Math.floor(t / 60)).padStart(2, '0'), s = String(t % 60).padStart(2, '0'), c = String(Math.floor((tMs % 1000) / 10)).padStart(2, '0');
                 if (state.mode !== 'chrono' && current.status !== 'stopped') { const totalSeconds = tMs / 1000; if (totalSeconds > 0 && totalSeconds <= 10) { this.els.display.classList.add('time-urgent'); this.els.display.style.color = ""; } else { this.els.display.classList.remove('time-urgent'); this.els.display.style.color = (totalSeconds > 10 && totalSeconds <= 30) ? "var(--warning-color)" : ""; } } 
                 else { this.els.display.classList.remove('time-urgent'); this.els.display.style.color = ""; }
-                this.els.display.innerHTML = state.isWindowed ? `${m}:${s}` : `${m}:${s}<span class="centiseconds">.${c}</span>`;
+                this.els.display.innerHTML = `${m}:${s}<span class="centiseconds">.${c}</span>`;
                 document.title = current.status === 'running' ? `(${m}:${s}) Timer Pro` : `Timer Flutuante Pro`;
             },
             updateStatusText() {
@@ -635,66 +1003,138 @@
                 const t = Math.floor(tMs / 1000);
                 const m = String(Math.floor(t / 60)).padStart(2, '0');
                 const s = String(t % 60).padStart(2, '0');
-                
+
                 this.els.hudTime.textContent = `${m}:${s}`;
-                
+
+                const progressWrap = document.getElementById('hud-progress-wrap');
+                const progressBar = document.getElementById('hud-progress-bar');
+
                 if (state.mode === 'chrono') {
                     this.els.hudLabel.textContent = "CRONÓMETRO";
-                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                    this.els.hudSub.textContent = current.status === 'running' ? "A contar..." : "Pausado";
+                    progressWrap.style.display = 'none';
                 } else if (state.mode === 'countdown') {
                     this.els.hudLabel.textContent = "REGRESSIVO";
-                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                    const total = state.timers.countdown.totalDuration || tMs;
+                    const pct = total > 0 ? Math.max(0, (tMs / total) * 100) : 0;
+                    this.els.hudSub.textContent = current.status === 'running' ? "A contar..." : "Pausado";
+                    progressWrap.style.display = 'block';
+                    progressBar.style.width = pct + '%';
                 } else if (state.mode === 'pomodoro') {
-                    this.els.hudLabel.textContent = current.phase === 'work' ? "FOCO 🔥" : "PAUSA ☕";
-                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                    const phase = state.timers.pomodoro.phase;
+                    const cycle = state.timers.pomodoro.cycleCount || 0;
+                    const phaseLabel = phase === 'work' ? `🔥 FOCO` : phase === 'longBreak' ? '🛋️ PAUSA LONGA' : '☕ PAUSA';
+                    this.els.hudLabel.textContent = phaseLabel;
+                    const pSettings = state.pomodoroSettings || { work: 25, break: 5, longBreak: 15, cyclesBeforeLong: 4 };
+                    const total = (phase === 'work' ? pSettings.work : phase === 'longBreak' ? pSettings.longBreak : pSettings.break) * 60 * 1000;
+                    const pct = total > 0 ? Math.max(0, (tMs / total) * 100) : 0;
+                    this.els.hudSub.textContent = `Ciclo ${cycle + (phase === 'work' ? 1 : 0)} / ${pSettings.cyclesBeforeLong || 4}`;
+                    progressWrap.style.display = 'block';
+                    progressBar.style.width = pct + '%';
                 } else if (state.mode === 'tasks') {
                     const task = state.tasks[state.timers.tasks.index];
-                    this.els.hudLabel.textContent = task ? task.name : "TAREFAS";
-                    this.els.hudSub.textContent = state.tasks.length > 0 ? `Tarefa ${state.timers.tasks.index + 1}/${state.tasks.length}` : "Nenhuma tarefa";
+                    this.els.hudLabel.textContent = task ? task.name.toUpperCase() : "TAREFAS";
+                    const total = task ? task.duration : 0;
+                    const pct = total > 0 ? Math.max(0, (tMs / total) * 100) : 0;
+                    const idx = state.timers.tasks.index;
+                    this.els.hudSub.textContent = state.tasks.length > 0 ? `${idx + 1} / ${state.tasks.length}` : "Sem tarefas";
+                    progressWrap.style.display = 'block';
+                    progressBar.style.width = pct + '%';
                 }
 
                 if (state.mode !== 'chrono' && current.status !== 'stopped') {
-                    const totalSeconds = tMs / 1000;
-                    if (totalSeconds > 0 && totalSeconds <= 10) { this.els.hudTime.style.color = "var(--danger-color)"; } 
-                    else if (totalSeconds > 10 && totalSeconds <= 30) { this.els.hudTime.style.color = "var(--warning-color)"; } 
-                    else { this.els.hudTime.style.color = ""; }
+                    const sec = tMs / 1000;
+                    if (sec > 0 && sec <= 10) this.els.hudTime.style.color = "var(--danger-color)";
+                    else if (sec > 10 && sec <= 30) this.els.hudTime.style.color = "var(--warning-color)";
+                    else this.els.hudTime.style.color = "";
                 } else {
                     this.els.hudTime.style.color = "";
                 }
 
-                this.els.hudBtnPlay.innerHTML = current.status === 'running' 
-                    ? '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>' 
+                this.els.hudBtnPlay.innerHTML = current.status === 'running'
+                    ? '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>'
                     : '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+
+                // Sincroniza badge do toggle
+                const badge = document.getElementById('omniscient-badge');
+                const row = document.getElementById('omniscient-row');
+                if (badge) { badge.textContent = state.focusModeEnabled ? 'ON' : 'OFF'; badge.className = 'omniscient-badge' + (state.focusModeEnabled ? ' on' : ''); }
+                if (row) row.classList.toggle('active', state.focusModeEnabled);
             },
             update() {
                 const current = state.timers[state.mode]; let color = taskColors[0];
                 if (state.mode === 'tasks' && state.tasks.length > 0) color = taskColors[state.timers.tasks.index % taskColors.length];
-                else if (state.mode === 'pomodoro') color = state.timers.pomodoro.phase === 'work' ? '#FF3B30' : '#34C759';
+                else if (state.mode === 'pomodoro') { 
+                    const ph = state.timers.pomodoro.phase;
+                    color = ph === 'work' ? '#FF3B30' : ph === 'longBreak' ? '#AF52DE' : '#34C759';
+                }
                 
-                document.documentElement.style.setProperty('--task-accent', color); document.body.className = state.extremeFocus ? 'extreme-mode' : state.theme; document.getElementById('theme-select').value = state.theme;
+                document.documentElement.style.setProperty('--task-accent', color); document.body.className = state.extremeFocus ? 'extreme-mode' : state.theme;
+                // Sincronizar bolinhas de tema
+                const themeNames = { 'theme-dark':'Deep Dark','theme-light':'Pure Light','theme-midnight':'Midnight','theme-amoled':'AMOLED','theme-forest':'Forest','theme-sunset':'Sunset','theme-ocean':'Ocean','theme-sepia':'Sepia','theme-nord':'Nord' };
+                document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === state.theme));
+                const lbl = document.getElementById('theme-name-label'); if (lbl) lbl.textContent = themeNames[state.theme] || state.theme;
                 document.querySelectorAll('.mode-item').forEach((e, i) => e.classList.toggle('active', state.mode === ['chrono', 'countdown', 'pomodoro', 'tasks'][i]));
                 
                 this.els.startBtn.innerHTML = current.status === 'running' ? '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg>';
                 
                 document.getElementById('btn-task-list').style.display = state.mode === 'tasks' ? 'flex' : 'none';
                 
-                if (state.mode === 'chrono') this.els.label.textContent = "CRONÓMETRO"; else if (state.mode === 'countdown') this.els.label.textContent = "REGRESSIVO"; else if (state.mode === 'pomodoro') this.els.label.textContent = state.timers.pomodoro.phase === 'work' ? "FOCO 🔥" : "PAUSA ☕"; else if (state.mode === 'tasks') this.els.label.textContent = state.tasks[state.timers.tasks.index] ? state.tasks[state.timers.tasks.index].name : "LISTA VAZIA";
-                document.getElementById('btn-auto-opacity').textContent = `AUTO: ${state.autoOpacityEnabled ? 'ON' : 'OFF'}`; document.getElementById('btn-auto-opacity').style.opacity = state.autoOpacityEnabled ? '1' : '0.5';
-
+                if (state.mode === 'chrono') this.els.label.textContent = "CRONÓMETRO"; 
+                else if (state.mode === 'countdown') this.els.label.textContent = "REGRESSIVO"; 
+                else if (state.mode === 'pomodoro') { 
+                    const ph = state.timers.pomodoro.phase; const cy = state.timers.pomodoro.cycleCount || 0;
+                    const ps = state.pomodoroSettings;
+                    if (ph === 'work') this.els.label.textContent = `🔥 FOCO — ${cy + 1}/${ps.cyclesBeforeLong}`;
+                    else if (ph === 'longBreak') this.els.label.textContent = '🛋️ PAUSA LONGA';
+                    else this.els.label.textContent = '☕ PAUSA';
+                } 
+                else if (state.mode === 'tasks') this.els.label.textContent = state.tasks[state.timers.tasks.index] ? state.tasks[state.timers.tasks.index].name : "LISTA VAZIA";
                 this.updateDisplay(); this.updateOpacity(state.opacity); 
                 
+                // Sincroniza badge omnisciente
+                const badge = document.getElementById('omniscient-badge');
+                const row = document.getElementById('omniscient-row');
+                if (badge) { badge.textContent = state.focusModeEnabled ? 'ON' : 'OFF'; badge.className = 'omniscient-badge' + (state.focusModeEnabled ? ' on' : ''); }
+                if (row) row.classList.toggle('active', state.focusModeEnabled);
+
                 // Sincroniza HUD se ativo
                 if (state.hudActive) this.updateHUD();
             },
-            updateOpacity(v) { state.opacity = v; document.documentElement.style.setProperty('--ui-opacity', v / 100); document.getElementById('opacity-val').textContent = v; },
-            syncToggles() { document.getElementById('toggle-30s').checked = !state.mute30s; document.getElementById('toggle-10s').checked = !state.mute10s; document.getElementById('toggle-end').checked = !state.muteEnd; },
-            setupDraggable() {
-                const h = document.getElementById('drag-handle'); let d = false, o = {x:0, y:0}; const timerEl = this.els.timer;
-                const s = (e) => { if(!state.isWindowed || state.extremeFocus) return; d = true; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; o = {x:cx - timerEl.offsetLeft, y:cy - timerEl.offsetTop}; };
-                const m = (e) => { if(!d) return; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; state.left = (cx - o.x)+'px'; state.top = (cy - o.y)+'px'; timerEl.style.left = state.left; timerEl.style.top = state.top; };
-                const e = () => d = false;
-                h.addEventListener('mousedown', s); h.addEventListener('touchstart', s, {passive: false}); window.addEventListener('mousemove', m); window.addEventListener('touchmove', m, {passive: false}); window.addEventListener('mouseup', e); window.addEventListener('touchend', e);
+            renderWeekChart() {
+                const container = document.getElementById('week-bars');
+                if (!container) return;
+                const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+                const today = new Date();
+                const todayStr = today.toDateString();
+                const weekDays = [];
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(today); d.setDate(today.getDate() - i);
+                    weekDays.push({ label: days[d.getDay()], key: d.toDateString(), isToday: i === 0 });
+                }
+                const data = state.stats.weeklyData || {};
+                const values = weekDays.map(d => data[d.key] || 0);
+                const maxVal = Math.max(...values, 1);
+                container.innerHTML = weekDays.map((d, i) => {
+                    const ms = values[i];
+                    const mins = Math.floor(ms / 60000);
+                    const heightPct = Math.max((ms / maxVal) * 100, ms > 0 ? 4 : 0);
+                    const valLabel = mins >= 60 ? `${Math.floor(mins/60)}h` : mins > 0 ? `${mins}m` : '';
+                    return `<div class="week-bar-wrap">
+                        <span class="week-bar-val">${valLabel}</span>
+                        <div class="week-bar ${d.isToday ? 'today' : ''} ${ms === 0 ? 'empty' : ''}" style="height:${heightPct}%"></div>
+                        <span class="week-day ${d.isToday ? 'today' : ''}">${d.label}</span>
+                    </div>`;
+                }).join('');
             },
+            syncToggles() { 
+                document.getElementById('toggle-30s').checked = !state.mute30s; 
+                document.getElementById('toggle-10s').checked = !state.mute10s; 
+                document.getElementById('toggle-end').checked = !state.muteEnd;
+                document.getElementById('toggle-auto-opacity').checked = state.autoOpacityEnabled;
+            },
+            updateOpacity(v) { state.opacity = v; document.documentElement.style.setProperty('--ui-opacity', v / 100); document.getElementById('opacity-val').textContent = v; },
+            setupDraggable() {},
             setupHUDDraggable() {
                 const h = document.getElementById('hud-drag-handle'); let d = false, o = {x:0, y:0}; const hudEl = this.els.hud;
                 const s = (e) => { if(e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return; d = true; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; o = {x: cx - hudEl.offsetLeft, y: cy - hudEl.offsetTop}; };
@@ -702,7 +1142,7 @@
                 const e = () => d = false;
                 h.addEventListener('mousedown', s); h.addEventListener('touchstart', s, {passive: false}); window.addEventListener('mousemove', m); window.addEventListener('touchmove', m, {passive: false}); window.addEventListener('mouseup', e); window.addEventListener('touchend', e);
             },
-            closeAllPanels() { document.querySelectorAll('.overlay-panel').forEach(e => e.style.display = 'none'); this.els.mask.style.display = 'none'; document.getElementById('confirm-clear').style.display = 'none'; },
+            closeAllPanels() { document.querySelectorAll('.overlay-panel').forEach(e => e.style.display = 'none'); this.els.mask.style.display = 'none'; document.getElementById('confirm-clear').style.display = 'none'; document.getElementById('session-name-overlay').classList.remove('show'); },
             togglePanel(id) { const p = document.getElementById(id), vis = p.style.display === 'flex'; this.closeAllPanels(); if (!vis) { p.style.display = 'flex'; this.els.mask.style.display = 'block'; } },
             getQuickEditValues() { return { m: parseInt(document.getElementById('quick-min').value) || 0, s: parseInt(document.getElementById('quick-sec').value) || 0 }; },
             getTaskListInput() { return document.getElementById('task-list-input').value; },
@@ -712,18 +1152,67 @@
                 const minutes = Math.floor((state.stats.totalFocusTime % 3600000) / 60000);
                 document.getElementById('stat-time').textContent = `${hours}h ${minutes}m`;
                 document.getElementById('stat-sessions').textContent = state.stats.sessionsCompleted;
-                document.getElementById('stat-streak').textContent = state.stats.streak;
+                document.getElementById('goal-input').value = state.stats.dailyGoalMinutes || 120;
+                // Streaks por modo
+                const streaks = state.stats.streaks || {};
+                ['chrono','countdown','pomodoro','tasks'].forEach(m => {
+                    const el = document.getElementById(`streak-${m}`);
+                    if (el) el.textContent = streaks[m]?.count || 0;
+                });
+                this.updateGoalRing();
+                this.renderWeekChart();
+                // Renderizar histórico
+                const list = document.getElementById('history-list');
+                if (!list) return;
+                if (!state.history || state.history.length === 0) { list.innerHTML = '<div class="history-empty">Sem sessões registadas</div>'; return; }
+                const modeIcons = { chrono: '⏱', countdown: '⏳', pomodoro: '🍅', tasks: '✅' };
+                list.innerHTML = state.history.map(e => {
+                    const mins = Math.floor(e.duration / 60000);
+                    const secs = Math.floor((e.duration % 60000) / 1000);
+                    const durStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                    return `<div class="history-item">
+                        <div class="history-item-left">
+                            <span class="history-item-name">${modeIcons[e.mode] || '⏱'} ${e.name}</span>
+                            <span class="history-item-meta">${e.date} às ${e.time}</span>
+                        </div>
+                        <span class="history-item-dur">${durStr}</span>
+                    </div>`;
+                }).join('');
+            },
+            updateGoalRing() {
+                const today = new Date().toDateString();
+                if (state.stats.dailyGoalDate !== today) {
+                    state.stats.dailyFocusToday = 0;
+                    state.stats.dailyGoalDate = today;
+                    state.stats.goalCelebrated = false;
+                }
+                const goalMs = (state.stats.dailyGoalMinutes || 120) * 60000;
+                const doneMs = state.stats.dailyFocusToday || 0;
+                const pct = Math.min(100, Math.round((doneMs / goalMs) * 100));
+                const circumference = 326.7;
+                const offset = circumference - (pct / 100) * circumference;
+                const ring = document.getElementById('goal-ring-progress');
+                const pctEl = document.getElementById('goal-ring-pct');
+                const detailEl = document.getElementById('goal-ring-detail');
+                if (ring) { ring.style.strokeDashoffset = offset; ring.classList.toggle('complete', pct >= 100); }
+                if (pctEl) pctEl.textContent = pct + '%';
+                if (detailEl) {
+                    const donMin = Math.floor(doneMs / 60000);
+                    const goalMin = state.stats.dailyGoalMinutes || 120;
+                    detailEl.textContent = `${donMin} / ${goalMin} min hoje`;
+                }
             }
         };
 
         const TimerCore = {
             lastTimestamp: 0,
+            _pendingTimers: {},
             alertsFired: { chrono: { s30: false, s10: false }, countdown: { s30: false, s10: false }, pomodoro: { s30: false, s10: false }, tasks: { s30: false, s10: false } },
             initValues(forceReset = false, mode = state.mode) {
                 const current = state.timers[mode];
                 if (forceReset || current.elapsedTime === 0) {
                     if (mode === 'chrono') current.elapsedTime = 0;
-                    else if (mode === 'countdown') { const vals = UIController.getQuickEditValues(); current.elapsedTime = (vals.m * 60 + vals.s) * 1000; } 
+                    else if (mode === 'countdown') { const vals = UIController.getQuickEditValues(); current.elapsedTime = (vals.m * 60 + vals.s) * 1000; current.totalDuration = current.elapsedTime; } 
                     else if (mode === 'pomodoro') { const pSettings = state.pomodoroSettings || { work: 25, break: 5 }; current.elapsedTime = (state.timers.pomodoro.phase === 'work' ? pSettings.work : pSettings.break) * 60 * 1000; } 
                     else if (mode === 'tasks') { const t = state.tasks[state.timers.tasks.index]; current.elapsedTime = t ? t.duration : 0; }
                     current.status = 'stopped'; this.alertsFired[mode] = { s30: false, s10: false }; StorageManager.save();
@@ -748,7 +1237,29 @@
                     }
                 });
                 
-                if (anyTimerUpdated) state.stats.totalFocusTime += delta;
+                if (anyTimerUpdated) {
+                    state.stats.totalFocusTime += delta;
+                    // Acumula foco semanal
+                    const today = new Date().toDateString();
+                    if (!state.stats.weeklyData) state.stats.weeklyData = {};
+                    state.stats.weeklyData[today] = (state.stats.weeklyData[today] || 0) + delta;
+                    // Limpar dias com mais de 7 dias
+                    const cutoff = Date.now() - 7 * 24 * 3600000;
+                    Object.keys(state.stats.weeklyData).forEach(k => { if (new Date(k).getTime() < cutoff) delete state.stats.weeklyData[k]; });
+                    // Acumula foco do dia e verifica meta
+                    if (state.stats.dailyGoalDate !== today) { state.stats.dailyFocusToday = 0; state.stats.dailyGoalDate = today; state.stats.goalCelebrated = false; }
+                    state.stats.dailyFocusToday += delta;
+                    const goalMs = (state.stats.dailyGoalMinutes || 120) * 60000;
+                    if (!state.stats.goalCelebrated && state.stats.dailyFocusToday >= goalMs) {
+                        state.stats.goalCelebrated = true;
+                        SoundEngine.vibrate([200, 100, 200, 100, 400]);
+                        const el = document.getElementById('celebrate-overlay');
+                        const sub = document.getElementById('celebrate-sub');
+                        if (sub) sub.textContent = `${state.stats.dailyGoalMinutes} minutos de foco hoje. Incrível! 🔥`;
+                        if (el) el.classList.add('show');
+                        StorageManager.save();
+                    }
+                }
 
                 if (anyTimerUpdated) {
                     if (state.hudActive) {
@@ -756,6 +1267,9 @@
                     } else if (state.timers[state.mode].status === 'running') {
                         UIController.updateDisplay(); UIController.updateStatusText();
                     }
+                    // Atualizar anel se painel stats estiver aberto
+                    const statsPanel = document.getElementById('stats-panel');
+                    if (statsPanel && statsPanel.style.display === 'flex') UIController.updateGoalRing();
                 }
                 
                 if (anyTimerUpdated && Math.floor(timestamp / 1000) !== Math.floor(this.lastTimestamp / 1000)) NotificationManager.updateSystem();
@@ -772,12 +1286,29 @@
             timerFinished(mode, timer) {
                 timer.status = 'finished'; SoundEngine.play('end'); NotificationManager.sendAlert(`⏰ TEMPO FINALIZADO!`, true, mode);
                 
-                if(mode !== 'chrono') { state.stats.sessionsCompleted++; this.updateStreak(); }
+                if (mode !== 'chrono') { state.stats.sessionsCompleted++; this.updateStreak(mode); }
+
+                // Gravar no histórico
+                const modeLabels = { chrono: 'Cronómetro', countdown: 'Regressivo', pomodoro: 'Pomodoro', tasks: 'Tarefas' };
+                const duration = timer._sessionStart ? Date.now() - timer._sessionStart : 0;
+                if (duration > 5000) { // só grava se passou mais de 5s
+                    const entry = {
+                        id: Date.now(),
+                        name: state.currentSessionName || modeLabels[mode] || mode,
+                        mode,
+                        duration,
+                        date: new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' }),
+                        time: new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })
+                    };
+                    state.history.unshift(entry);
+                    if (state.history.length > 50) state.history.pop();
+                    state.currentSessionName = '';
+                }
 
                 if (mode === state.mode) { 
                     NotificationManager.closeInstance(mode); 
-                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(100); 
-                    
+                    // Restaura opacidade só se HUD ativo
+                    if (state.autoOpacityEnabled && state.hudActive) UIController.updateOpacity(100); 
                     if (!state.hudActive) {
                         document.getElementById('finish-modal').style.display = 'block'; 
                     } else {
@@ -786,48 +1317,100 @@
                 }
                 
                 StorageManager.save();
-                
-                if (mode === 'tasks' && timer.index < state.tasks.length - 1) {
-                    timer.index++; setTimeout(() => { 
-                        if (mode === state.mode) closeFinishModal(); 
-                        const t = state.tasks[timer.index]; timer.elapsedTime = t ? t.duration : 0; this.alertsFired.tasks = { s30: false, s10: false }; timer.status = 'running';
-                        if (mode === state.mode) UIController.update(); 
+
+                // Ciclo Pomodoro: work→break(curta ou longa)→work, com contador de ciclos
+                if (mode === 'pomodoro') {
+                    const ps = state.pomodoroSettings || { work: 25, break: 5, longBreak: 15, cyclesBeforeLong: 4 };
+                    let nextPhase, nextDuration, nextLabel;
+                    if (timer.phase === 'work') {
+                        timer.cycleCount = (timer.cycleCount || 0) + 1;
+                        const isLongBreak = timer.cycleCount % (ps.cyclesBeforeLong || 4) === 0;
+                        nextPhase = isLongBreak ? 'longBreak' : 'break';
+                        nextDuration = (isLongBreak ? ps.longBreak : ps.break) * 60 * 1000;
+                        nextLabel = isLongBreak ? `🛋️ Pausa longa (${ps.longBreak}min)` : `☕ Pausa (${ps.break}min)`;
+                    } else {
+                        nextPhase = 'work';
+                        nextDuration = ps.work * 60 * 1000;
+                        nextLabel = `🔥 Foco (${ps.work}min) — Ciclo ${timer.cycleCount + 1}`;
+                    }
+                    clearTimeout(this._pendingTimers.pomodoro);
+                    this._pendingTimers.pomodoro = setTimeout(() => {
+                        if (timer.status !== 'finished') return;
+                        timer.phase = nextPhase;
+                        timer.elapsedTime = nextDuration;
+                        timer._sessionStart = Date.now();
+                        this.alertsFired.pomodoro = { s30: false, s10: false };
+                        timer.status = 'running';
+                        if (mode === state.mode) { closeFinishModal(); UIController.update(); }
+                        NotificationManager.sendAlert(`Iniciando: ${nextLabel}`, false, mode);
                     }, 2000);
                 }
+                
+                // Tasks: passa para próxima tarefa automaticamente
+                if (mode === 'tasks' && timer.index < state.tasks.length - 1) {
+                    clearTimeout(this._pendingTimers.tasks);
+                    this._pendingTimers.tasks = setTimeout(() => {
+                        if (timer.status !== 'finished') return;
+                        timer.index++;
+                        const t = state.tasks[timer.index];
+                        timer.elapsedTime = t ? t.duration : 0;
+                        timer._sessionStart = Date.now();
+                        this.alertsFired.tasks = { s30: false, s10: false };
+                        timer.status = 'running';
+                        if (mode === state.mode) { closeFinishModal(); UIController.update(); }
+                    }, 2000);
+                }
+
                 if (mode === state.mode) UIController.update();
             },
-            updateStreak() {
+            updateStreak(mode) {
+                if (!state.stats.streaks) return;
+                const s = state.stats.streaks[mode];
+                if (!s) return;
                 const today = new Date().toDateString();
-                if (state.stats.lastDate !== today) {
-                    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                    if (state.stats.lastDate === yesterday.toDateString()) { state.stats.streak++; } else { state.stats.streak = 1; }
-                    state.stats.lastDate = today;
-                }
+                if (s.lastDate === today) return; // já contou hoje
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                s.count = (s.lastDate === yesterday.toDateString()) ? s.count + 1 : 1;
+                s.lastDate = today;
             },
             toggle() {
                 SoundEngine.ensureInit(); const current = state.timers[state.mode];
                 if (current.status === 'running') { 
                     current.status = 'paused'; 
-                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(100); 
                     NotificationManager.closeInstance(state.mode); 
+                    StorageManager.save(); UIController.update();
                 } 
                 else { 
-                    if (current.status === 'stopped' || current.status === 'finished') { this.alertsFired[state.mode] = { s30: false, s10: false }; this.initValues(true); } 
-                    current.status = 'running'; 
-                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(40); 
-                    NotificationManager.updateSystem(); 
+                    if (current.status === 'stopped' || current.status === 'finished') {
+                        this.alertsFired[state.mode] = { s30: false, s10: false };
+                        this.initValues(true);
+                        // Pedir nome da sessão
+                        const overlay = document.getElementById('session-name-overlay');
+                        const input = document.getElementById('session-name-input');
+                        if (overlay && input) { input.value = ''; overlay.classList.add('show'); setTimeout(() => input.focus(), 300); return; }
+                    }
+                    this._startTimer();
                 }
-                
-                if(!state.hudActive) {
-                    UIController.els.display.style.transform = 'scale(1.05)'; setTimeout(() => UIController.els.display.style.transform = '', 200);
-                }
-                
+            },
+            _startTimer() {
+                const current = state.timers[state.mode];
+                current.status = 'running';
+                current._sessionStart = Date.now();
+                // Opacidade automática só no modo Omnisciente
+                if (state.autoOpacityEnabled && state.hudActive) UIController.updateOpacity(40);
+                NotificationManager.updateSystem();
+                if (!state.hudActive) { UIController.els.display.style.transform = 'scale(1.05)'; setTimeout(() => UIController.els.display.style.transform = '', 200); }
                 StorageManager.save(); UIController.update();
             },
             reset() {
-                const current = state.timers[state.mode]; current.status = 'stopped'; 
-                this.alertsFired[state.mode] = { s30: false, s10: false }; this.initValues(true); NotificationManager.closeInstance(state.mode); 
-                StorageManager.save(); UIController.update(); 
+                const current = state.timers[state.mode];
+                clearTimeout(this._pendingTimers[state.mode]);
+                current.status = 'stopped';
+                if (state.mode === 'pomodoro') { current.phase = 'work'; current.cycleCount = 0; }
+                this.alertsFired[state.mode] = { s30: false, s10: false };
+                this.initValues(true); NotificationManager.closeInstance(state.mode);
+                document.getElementById('session-name-overlay').classList.remove('show');
+                StorageManager.save(); UIController.update();
             }
         };
 
@@ -852,6 +1435,15 @@
                         console.warn('Timer: falha ao carregar estado salvo, usando defaults.', e);
                     }
                 }
+                // Garante que perfis padrão existem sempre, mesmo em saves antigos
+                const defaultProfiles = [
+                    { id: 'p_study', name: '📚 Estudo Focado', type: 'pomodoro', data: { work: 25, break: 5 } },
+                    { id: 'p_deep',  name: '🧠 Foco Profundo',  type: 'countdown', data: { m: 90, s: 0 } },
+                    { id: 'p_workout', name: '💪 Treino HIIT', type: 'tasks', data: { tasks: "Aquecimento 5m\nSprints 20m\nDescanso 5m" } }
+                ];
+                defaultProfiles.forEach(dp => {
+                    if (!state.profiles.find(p => p.id === dp.id)) state.profiles.unshift(dp);
+                });
             },
             setupAutoSave() { window.addEventListener('beforeunload', () => this.save()); document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') this.save(); }); }
         };
@@ -859,28 +1451,44 @@
         // ==========================================
         // MÓDULO OMNISCIENT HUD E EVENTOS GLOBAIS
         // ==========================================
-        function toggleOmniscientFocus() {
-            state.focusModeEnabled = !state.focusModeEnabled;
-            UIController.showToast(state.focusModeEnabled ? "👁️ Focus Inteligente Ativado" : "Focus Inteligente Desativado");
+        async function toggleOmniscientFocus() {
+            if (!state.focusModeEnabled) {
+                // Pedir permissão ao ativar
+                if ("Notification" in window && Notification.permission === 'default') {
+                    const perm = await Notification.requestPermission();
+                    if (perm !== 'granted') {
+                        UIController.showToast("⚠️ Permissão negada. Ative nas configurações.");
+                        return;
+                    }
+                }
+                state.focusModeEnabled = true;
+                UIController.showToast("👁️ Modo Omnisciente ATIVADO");
+            } else {
+                state.focusModeEnabled = false;
+                if (state.hudActive) restoreFromHUD();
+                UIController.showToast("Modo Omnisciente desativado");
+            }
             StorageManager.save();
             UIController.update();
         }
 
         function activateHUD() {
-            if (!state.focusModeEnabled || state.hudActive) return;
+            if (!state.focusModeEnabled || state.hudActive || state.extremeFocus) return;
             state.hudActive = true;
             UIController.els.timer.classList.add('hud-hidden');
             UIController.els.hud.classList.add('hud-visible');
+            if (state.autoOpacityEnabled) UIController.updateOpacity(40);
             UIController.updateHUD();
         }
 
         function restoreFromHUD() {
+            if (!state.hudActive) return;
             state.hudActive = false;
             UIController.els.hud.classList.remove('hud-visible');
             UIController.els.timer.classList.remove('hud-hidden');
+            UIController.updateOpacity(100);
             UIController.update();
             
-            // Exibe modal e toast para cada timer finalizado no background
             if (state.finishQueue.length > 0) {
                 const labels = { chrono: 'Cronómetro', countdown: 'Regressivo', pomodoro: 'Pomodoro', tasks: 'Tarefas' };
                 state.finishQueue.forEach(m => UIController.showToast(`⏰ ${labels[m] || m} finalizado!`));
@@ -892,21 +1500,27 @@
         function exitFocusModeHUD() {
             state.focusModeEnabled = false;
             restoreFromHUD();
-            UIController.showToast("🛑 Focus Inteligente Desativado");
+            UIController.showToast("👁️ Modo Omnisciente desativado");
             StorageManager.save();
+            UIController.update();
         }
 
-        // Listener de Ausência e Retorno (Trigger do Omniscient HUD)
+        // Sai do app → colapsa para HUD
         window.addEventListener('blur', () => {
-            if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
-                activateHUD();
-            }
+            if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) activateHUD();
         });
-
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'hidden' && state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
                 activateHUD();
             }
+            // Volta ao app → restaura automaticamente
+            if (document.visibilityState === 'visible' && state.hudActive) {
+                restoreFromHUD();
+            }
+        });
+        // Foco retorna à janela → restaura
+        window.addEventListener('focus', () => {
+            if (state.hudActive) restoreFromHUD();
         });
 
         // ==========================================
@@ -944,9 +1558,17 @@
         // ==========================================
         function toggleExtremeFocus() {
             state.extremeFocus = !state.extremeFocus;
-            if (state.extremeFocus && state.timers[state.mode].status !== 'running') toggleTimer(); 
+            if (state.extremeFocus && state.timers[state.mode].status !== 'running') {
+                // Arranca diretamente sem modal de nome
+                const current = state.timers[state.mode];
+                if (current.status === 'stopped' || current.status === 'finished') {
+                    TimerCore.alertsFired[state.mode] = { s30: false, s10: false };
+                    TimerCore.initValues(true);
+                }
+                TimerCore._startTimer();
+            }
             if (state.extremeFocus) {
-                if (state.hudActive) restoreFromHUD(); // Force close HUD se estiver no modo Extremo
+                if (state.hudActive) restoreFromHUD();
                 UIController.showToast("🎯 Foco Extremo Ativado!");
             }
             UIController.update();
@@ -957,28 +1579,252 @@
         function toggleTimer() { TimerCore.toggle(); }
         function resetTimer() { TimerCore.reset(); }
         
-        function setMode(m) { 
+        function setMode(m, direction = 0) { 
             if (state.mode === m) return;
+            closePomoSheet();
+            // Animação de slide
+            const content = document.querySelector('.content');
+            if (content && direction !== 0) {
+                content.style.transition = 'transform 0.15s ease, opacity 0.15s ease';
+                content.style.transform = `translateX(${direction > 0 ? '-30px' : '30px'})`;
+                content.style.opacity = '0';
+                setTimeout(() => {
+                    content.style.transition = 'transform 0.2s cubic-bezier(0.34,1.2,0.64,1), opacity 0.2s ease';
+                    content.style.transform = `translateX(${direction > 0 ? '20px' : '-20px'})`;
+                    content.style.opacity = '1';
+                    setTimeout(() => { content.style.transform = ''; content.style.transition = ''; }, 200);
+                }, 150);
+            }
             state.mode = m; const current = state.timers[m];
             if (current.elapsedTime === 0 && m !== 'chrono') TimerCore.initValues();
-            if (current.status === 'running' && state.autoOpacityEnabled && !state.extremeFocus) UIController.updateOpacity(40); else if (state.autoOpacityEnabled && !state.extremeFocus) UIController.updateOpacity(100);
-            StorageManager.save(); UIController.update(); 
+            const hint = document.getElementById('pomo-swipe-hint');
+            if (hint) {
+                hint.classList.remove('show');
+                if (m === 'pomodoro') { void hint.offsetWidth; hint.classList.add('show'); }
+            }
+            StorageManager.save(); UIController.update();
+            const modes = ['chrono','countdown','pomodoro','tasks'];
+            setTimeout(() => snapIndicator(modes.indexOf(m), true), 10);
         }
 
-        function toggleWindowMode() { state.isWindowed = !state.isWindowed; UIController.els.timer.classList.toggle('windowed', state.isWindowed); UIController.update(); StorageManager.save(); }
         function closeAllPanels() { UIController.closeAllPanels(); document.getElementById('profile-creator').style.display = 'none'; }
         function toggleSoundPanel() { UIController.togglePanel('sound-panel'); }
         function toggleTaskEditor() { UIController.togglePanel('task-editor'); }
+        function togglePomodoroPanel() { 
+            const ps = state.pomodoroSettings;
+            document.getElementById('pomo-work').value = ps.work;
+            document.getElementById('pomo-break').value = ps.break;
+            document.getElementById('pomo-longbreak').value = ps.longBreak;
+            document.getElementById('pomo-cycles').value = ps.cyclesBeforeLong;
+            updatePomodoroPreview();
+            UIController.togglePanel('pomodoro-panel'); 
+        }
+
+        // ---- POMODORO BOTTOM SHEET ----
+        function openPomoSheet() {
+            const ps = state.pomodoroSettings;
+            document.getElementById('pomo-sheet-work').value = ps.work;
+            document.getElementById('pomo-sheet-break').value = ps.break;
+            document.getElementById('pomo-sheet-longbreak').value = ps.longBreak;
+            document.getElementById('pomo-sheet-cycles').value = ps.cyclesBeforeLong;
+            updatePomoSheetPreview();
+            document.getElementById('pomo-sheet').classList.add('open');
+            document.getElementById('pomo-sheet-overlay').classList.add('show');
+        }
+        function closePomoSheet() {
+            document.getElementById('pomo-sheet').classList.remove('open');
+            document.getElementById('pomo-sheet-overlay').classList.remove('show');
+        }
+        function updatePomoSheetPreview() {
+            document.getElementById('pomo-sheet-preview-work').textContent = document.getElementById('pomo-sheet-work').value;
+            document.getElementById('pomo-sheet-preview-break').textContent = document.getElementById('pomo-sheet-break').value;
+            document.getElementById('pomo-sheet-preview-longbreak').textContent = document.getElementById('pomo-sheet-longbreak').value;
+            document.getElementById('pomo-sheet-preview-cycles').textContent = document.getElementById('pomo-sheet-cycles').value;
+        }
+        function savePomoSheet() {
+            const ps = {
+                work: parseInt(document.getElementById('pomo-sheet-work').value) || 25,
+                break: parseInt(document.getElementById('pomo-sheet-break').value) || 5,
+                longBreak: parseInt(document.getElementById('pomo-sheet-longbreak').value) || 15,
+                cyclesBeforeLong: parseInt(document.getElementById('pomo-sheet-cycles').value) || 4
+            };
+            state.pomodoroSettings = ps;
+            const pt = state.timers.pomodoro;
+            if (pt.status !== 'running') { pt.phase = 'work'; pt.cycleCount = 0; TimerCore.initValues(true, 'pomodoro'); }
+            StorageManager.save(); UIController.update();
+            UIController.showToast('✅ Pomodoro configurado!');
+            closePomoSheet();
+        }
+
+        function snapIndicator(modeIndex, animated = true) {
+            const items = document.querySelectorAll('.mode-item');
+            const indicator = document.getElementById('tab-indicator');
+            const selector = document.getElementById('mode-selector');
+            if (!indicator || !items[modeIndex] || !selector) return;
+            // BUG 3 FIX: só calcular se o selector estiver visível
+            if (selector.offsetParent === null && !document.body.contains(selector)) return;
+            const item = items[modeIndex];
+            const sRect = selector.getBoundingClientRect();
+            const iRect = item.getBoundingClientRect();
+            if (iRect.width === 0) return; // elemento não visível
+            indicator.style.transition = animated ? 'transform 0.3s cubic-bezier(0.34,1.15,0.25,1), width 0.2s ease, top 0.2s ease, left 0.2s ease' : 'none';
+            indicator.style.width  = iRect.width + 'px';
+            indicator.style.height = iRect.height + 'px';
+            indicator.style.top    = (iRect.top - sRect.top) + 'px';
+            indicator.style.left   = (iRect.left - sRect.left) + 'px';
+            indicator.style.transform = 'translateX(0)';
+        }
+
+        function moveIndicatorBy(px) {
+            const indicator = document.getElementById('tab-indicator');
+            if (!indicator) return;
+            indicator.style.transition = 'none';
+            indicator.style.transform = `translateX(${px}px)`;
+        }
+
+        (function setupSwipeGestures() {
+            const el = document.getElementById('floating-timer');
+            const modes = ['chrono', 'countdown', 'pomodoro', 'tasks'];
+            let startY = 0, startX = 0, isDragging = false, currentDx = 0;
+
+            function getModeIndex() { return modes.indexOf(state.mode); }
+            function getTabWidth() {
+                const items = document.querySelectorAll('.mode-item');
+                if (items[0]) return items[0].getBoundingClientRect().width + 10;
+                return 80;
+            }
+
+            // BUG 1 FIX: ignorar se o target for botão ou elemento interativo
+            function isInteractive(target) {
+                return target.closest('button, input, select, textarea, [onclick], .mode-item, .icon-btn, .btn');
+            }
+
+            function onStart(x, y, target) {
+                if (target && isInteractive(target)) return;
+                startX = x; startY = y; isDragging = true; currentDx = 0;
+            }
+
+            function onMove(x, y) {
+                if (!isDragging) return;
+                const dx = x - startX;
+                const dy = y - startY;
+                if (Math.abs(dx) > Math.abs(dy) * 1.2) {
+                    const tabW = getTabWidth();
+                    const clamped = Math.max(-tabW, Math.min(tabW, dx));
+                    currentDx = clamped;
+                    moveIndicatorBy(clamped);
+                }
+            }
+
+            function onEnd(x, y) {
+                if (!isDragging) return;
+                isDragging = false;
+                const dx = startX - x;
+                const dy = startY - y;
+                const absDx = Math.abs(dx);
+                const absDy = Math.abs(dy);
+
+                if (absDx > 40 && absDx > absDy * 1.5) {
+                    const idx = getModeIndex();
+                    if (dx > 0) setMode(modes[(idx + 1) % modes.length], 1);
+                    else setMode(modes[(idx - 1 + modes.length) % modes.length], -1);
+                } else if (state.mode === 'pomodoro' && absDy > 60 && absDx < 40) {
+                    if (dy > 0) openPomoSheet();
+                    else closePomoSheet();
+                    snapIndicator(getModeIndex(), false);
+                } else {
+                    snapIndicator(getModeIndex(), true);
+                }
+            }
+
+            // Touch
+            el.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY, e.target), { passive: true });
+            el.addEventListener('touchmove',  e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+            el.addEventListener('touchend',   e => onEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY), { passive: true });
+
+            // Mouse (DEX) — BUG 1 FIX: passar target
+            el.addEventListener('mousedown', e => onStart(e.clientX, e.clientY, e.target));
+            window.addEventListener('mousemove', e => { if (isDragging) onMove(e.clientX, e.clientY); });
+            window.addEventListener('mouseup', e => { if (isDragging) onEnd(e.clientX, e.clientY); });
+            window.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; snapIndicator(getModeIndex(), true); } });
+
+            // BUG 2 FIX: handle do sheet com listener próprio sem mouseup global
+            const handle = document.getElementById('pomo-sheet-handle');
+            let hStartY = 0, hDragging = false;
+            handle.addEventListener('touchstart', e => { hStartY = e.touches[0].clientY; hDragging = true; }, { passive: true });
+            handle.addEventListener('touchend', e => { if (!hDragging) return; hDragging = false; if (e.changedTouches[0].clientY - hStartY > 40) closePomoSheet(); }, { passive: true });
+            handle.addEventListener('mousedown', e => { hStartY = e.clientY; hDragging = true; e.stopPropagation(); });
+            handle.addEventListener('mouseup', e => { if (!hDragging) return; hDragging = false; if (e.clientY - hStartY > 40) closePomoSheet(); });
+
+            // Posicionar indicador no arranque
+            setTimeout(() => snapIndicator(getModeIndex(), false), 100);
+        })();
+        function updatePomodoroPreview() {
+            const w = document.getElementById('pomo-work').value;
+            const b = document.getElementById('pomo-break').value;
+            const l = document.getElementById('pomo-longbreak').value;
+            const c = document.getElementById('pomo-cycles').value;
+            document.getElementById('pomo-preview-work').textContent = w;
+            document.getElementById('pomo-preview-break').textContent = b;
+            document.getElementById('pomo-preview-longbreak').textContent = l;
+            document.getElementById('pomo-preview-cycles').textContent = c;
+        }
+        function savePomodoroSettings() {
+            const ps = {
+                work: parseInt(document.getElementById('pomo-work').value) || 25,
+                break: parseInt(document.getElementById('pomo-break').value) || 5,
+                longBreak: parseInt(document.getElementById('pomo-longbreak').value) || 15,
+                cyclesBeforeLong: parseInt(document.getElementById('pomo-cycles').value) || 4
+            };
+            state.pomodoroSettings = ps;
+            // Reset pomodoro para aplicar novos valores
+            const pt = state.timers.pomodoro;
+            if (pt.status !== 'running') {
+                pt.phase = 'work'; pt.cycleCount = 0;
+                TimerCore.initValues(true, 'pomodoro');
+            }
+            StorageManager.save(); UIController.update();
+            UIController.showToast('✅ Pomodoro configurado!');
+            UIController.closeAllPanels();
+        }
         function openQuickEdit() { if (state.mode !== 'chrono') UIController.togglePanel('quick-edit'); }
         
         function applyQuickEdit() { state.timers[state.mode].status = 'stopped'; TimerCore.initValues(true); UIController.update(); UIController.closeAllPanels(); }
         function closeFinishModal() { document.getElementById('finish-modal').style.display = 'none'; }
-        function manualUpdateOpacity(v) { state.autoOpacityEnabled = false; UIController.updateOpacity(v); UIController.update(); StorageManager.save(); }
-        function toggleAutoOpacity() { state.autoOpacityEnabled = !state.autoOpacityEnabled; UIController.update(); StorageManager.save(); }
+        function manualUpdateOpacity(v) { UIController.updateOpacity(v); StorageManager.save(); }
+        function toggleAutoOpacity(checked) { 
+            state.autoOpacityEnabled = checked;
+            if (!checked) UIController.updateOpacity(100); // restaura imediatamente
+            StorageManager.save(); 
+        }
         function toggleSoundState(key, isChecked) { state[key] = !isChecked; StorageManager.save(); }
         function showConfirmClear() { document.getElementById('confirm-clear').style.display = 'flex'; }
         function confirmClear(choice) { document.getElementById('confirm-clear').style.display = 'none'; if (choice) { UIController.setTaskListInput(''); saveTasksFromInput(); } }
-        function updateTheme(t) { state.theme = t; UIController.update(); StorageManager.save(); }
+        function confirmSessionName() {
+            const input = document.getElementById('session-name-input');
+            state.currentSessionName = input ? input.value.trim() : '';
+            document.getElementById('session-name-overlay').classList.remove('show');
+            TimerCore._startTimer();
+        }
+        function skipSessionName() {
+            state.currentSessionName = '';
+            document.getElementById('session-name-overlay').classList.remove('show');
+            TimerCore._startTimer();
+        }
+        function clearHistory() { state.history = []; StorageManager.save(); UIController.renderStats(); }
+        function saveGoal() {
+            const v = parseInt(document.getElementById('goal-input').value) || 120;
+            state.stats.dailyGoalMinutes = Math.max(10, Math.min(720, v));
+            state.stats.goalCelebrated = false;
+            StorageManager.save(); UIController.updateGoalRing();
+            UIController.showToast(`🎯 Meta: ${state.stats.dailyGoalMinutes} min/dia`);
+        }
+        function closeCelebration() { document.getElementById('celebrate-overlay').classList.remove('show'); }
+        function updateTheme(t) { 
+            state.theme = t; 
+            UIController.update(); 
+            StorageManager.save(); 
+        }
         
         function saveTasksFromInput() {
             const input = UIController.getTaskListInput(); state.tasks = parseTasksString(input); state.timers.tasks.index = 0; state.timers.tasks.status = 'stopped'; 
@@ -989,7 +1835,8 @@
             PWAManager.init(); StorageManager.load(); StorageManager.setupAutoSave(); UIController.init(); 
             UIController.setupDraggable(); UIController.setupHUDDraggable(); 
             TimerCore.initValues(); UIController.update(); UIController.syncToggles(); NotificationManager.init(); 
-            TimerCore.lastTimestamp = performance.now(); requestAnimationFrame((ts) => TimerCore.tick(ts)); 
+            TimerCore.lastTimestamp = performance.now(); requestAnimationFrame((ts) => TimerCore.tick(ts));
+            document.getElementById('session-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') confirmSessionName(); });
         };
     </script>
 </body>
