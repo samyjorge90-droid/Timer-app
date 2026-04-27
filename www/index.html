@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Meta Tags PWA Essenciais -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Timer Pro">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/865/865969.png">
+    
+    <title>Timer Flutuante Pro</title>
+    <style>
+        :root {
+            --bg-glass: rgba(255, 255, 255, 0.08);
+            --border-glass: rgba(255, 255, 255, 0.15);
+            --text-color: #ffffff;
+            --accent-color: #007AFF;
+            --danger-color: #FF3B30;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --task-accent: var(--accent-color);
+            --bg-gradient: radial-gradient(circle at top right, #2c2c2e, #000000);
+            --ui-opacity: 1;
+            
+            --panel-bg: rgba(15, 15, 15, 0.98);
+            --input-bg: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --modal-bg: rgba(30, 30, 30, 0.95);
+        }
+
+        body.theme-light {
+            --bg-glass: rgba(0, 0, 0, 0.05);
+            --border-glass: rgba(0, 0, 0, 0.12);
+            --text-color: #1c1c1e;
+            --bg-gradient: linear-gradient(135deg, #f2f2f7, #e5e5ea);
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --modal-bg: rgba(255, 255, 255, 0.98);
+        }
+        
+        body.theme-dark {
+            --bg-glass: rgba(255, 255, 255, 0.08);
+            --border-glass: rgba(255, 255, 255, 0.15);
+            --text-color: #ffffff;
+            --bg-gradient: radial-gradient(circle at top right, #2c2c2e, #000000);
+            --panel-bg: rgba(15, 15, 15, 0.98);
+            --input-bg: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --modal-bg: rgba(30, 30, 30, 0.95);
+        }
+
+        /* --- MODO FOCO EXTREMO --- */
+        body.extreme-mode {
+            --bg-gradient: #000000 !important;
+        }
+        body.extreme-mode #floating-timer {
+            background: #000000;
+        }
+        body.extreme-mode .mode-selector,
+        body.extreme-mode .top-right-btns:not(.btn-extreme-exit-container),
+        body.extreme-mode .controls .btn:not(.btn-play),
+        body.extreme-mode .status-notification,
+        body.extreme-mode .handle {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0.9);
+        }
+        body.extreme-mode .task-label {
+            color: var(--danger-color) !important;
+            letter-spacing: 4px;
+        }
+        .btn-extreme-exit-container {
+            position: absolute; top: 20px; right: 20px; z-index: 100;
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        body.extreme-mode .btn-extreme-exit-container {
+            display: flex;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body { font-family: var(--font-main); height: 100vh; width: 100vw; overflow: hidden; background: var(--bg-gradient); display: flex; align-items: center; justify-content: center; transition: background 0.8s ease; }
+
+        #floating-timer {
+            position: relative; width: 100%; height: 100%;
+            display: flex; flex-direction: column; color: var(--text-color);
+            z-index: 10; overflow: hidden; transition: opacity 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.8s ease;
+            opacity: var(--ui-opacity);
+            transform-origin: center center;
+        }
+        
+        #floating-timer.hud-hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0.85);
+        }
+
+        #floating-timer.windowed {
+            position: fixed; width: 280px; height: 440px;
+            background: var(--panel-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 2px solid var(--task-accent); border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); touch-action: none;
+            transition: all 0.4s cubic-bezier(0.32, 1.15, 0.25, 1);
+        }
+
+        .handle { height: 35px; width: 100%; display: none; justify-content: center; align-items: center; cursor: move; flex-shrink: 0; transition: opacity 0.3s; }
+        #floating-timer.windowed .handle { display: flex; }
+        .handle::after { content: ''; width: 35px; height: 4px; background: var(--text-color); border-radius: 10px; opacity: 0.2; transition: opacity 0.3s; }
+        .handle:active::after { opacity: 0.5; }
+
+        .top-right-btns { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; transition: opacity 0.4s ease, transform 0.4s ease; }
+        @media (max-width: 600px) {
+            .top-right-btns { top: calc(10px + env(safe-area-inset-top)); right: 15px; position: absolute; flex-wrap: wrap; justify-content: flex-end; max-width: 70%; }
+            .mode-selector { margin-top: calc(55px + env(safe-area-inset-top)); padding: 10px 0; background: transparent; }
+        }
+
+        /* Micro-interações de Botões */
+        .icon-btn, .btn, .btn-action, .mode-item {
+            transition: transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1), background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+            will-change: transform;
+        }
+        .icon-btn:active, .btn:active, .btn-action:active, .mode-item:active {
+            transform: scale(0.92);
+        }
+
+        .icon-btn { background: var(--bg-glass); border: 1px solid var(--border-glass); color: var(--text-color); cursor: pointer; padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .icon-btn.active-focus { background: var(--task-accent); color: white; border-color: transparent; }
+
+        .mode-selector { display: flex; justify-content: center; gap: 10px; padding: 20px; background: rgba(0,0,0,0.05); flex-shrink: 0; z-index: 90; transition: opacity 0.4s ease, transform 0.4s ease; }
+        .mode-item { opacity: 0.5; cursor: pointer; padding: 8px 12px; font-size: 0.7rem; font-weight: 800; border-radius: 12px; color: var(--text-color); }
+        .mode-item.active { opacity: 1; color: white; background: var(--task-accent); transform: scale(1.05); }
+
+        .content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .task-label { font-size: 1.1rem; font-weight: 800; color: var(--task-accent); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, letter-spacing 0.4s ease; }
+        
+        .timer-display { 
+            font-size: clamp(4.5rem, 25vw, 9.5rem); 
+            font-weight: 900; 
+            font-variant-numeric: tabular-nums; 
+            margin: 5px 0; 
+            cursor: pointer; 
+            line-height: 1; 
+            transition: color 0.4s ease, transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.4s ease; 
+            will-change: transform, color;
+        }
+        .timer-display:active { transform: scale(0.96); }
+        #floating-timer.windowed .timer-display { font-size: 4.5rem; }
+        .centiseconds { font-size: 0.4em; opacity: 0.3; font-weight: 500; }
+        #floating-timer.windowed .centiseconds { display: none; }
+        .status-notification { font-size: 0.85rem; font-weight: 600; height: 20px; margin-bottom: 15px; opacity: 0.7; transition: opacity 0.4s ease, transform 0.4s ease; }
+
+        @keyframes pulse-urgent {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255, 59, 48, 0)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 20px rgba(255, 59, 48, 0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255, 59, 48, 0)); }
+        }
+        .time-urgent { animation: pulse-urgent 1s infinite cubic-bezier(0.4, 0, 0.2, 1); color: var(--danger-color) !important; }
+
+        .controls { display: flex; justify-content: center; align-items: center; gap: 25px; padding-bottom: 40px; flex-shrink: 0; }
+        #floating-timer.windowed .controls { padding-bottom: 25px; gap: 15px; }
+
+        .btn { background: var(--bg-glass); border: 1px solid var(--border-glass); color: var(--text-color); border-radius: 50%; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.4s ease, transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1); }
+        #floating-timer.windowed .btn { width: 55px; height: 55px; }
+        .btn svg { width: 40%; height: 40%; transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1); }
+        .btn-play { background: var(--task-accent); color: white; border: none; }
+        .btn-play svg { width: 45%; height: 45%; }
+
+        .panel-mask { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 150; display: none; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); animation: fadeIn 0.3s ease forwards; }
+        
+        .overlay-panel { 
+            position: absolute; bottom: 0; left: 0; right: 0; background: var(--panel-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-top: 1px solid var(--border-glass); padding: 25px; display: none; flex-direction: column; gap: 15px; z-index: 200; border-radius: 32px 32px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.3); 
+            animation: slideUpSpring 0.5s cubic-bezier(0.32, 1.15, 0.25, 1) forwards; 
+            max-height: 85%; overflow-y: auto; color: var(--text-color); 
+        }
+        
+        @keyframes slideUpSpring { from { transform: translateY(100%); opacity: 0.8; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .btn-action { width: 100%; height: 55px; border-radius: 18px; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; }
+        .setting-item { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .setting-label { font-size: 0.8rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
+
+        .sound-row-container { display: flex; flex-direction: column; gap: 8px; background: var(--card-bg); padding: 12px; border-radius: 16px; border: 1px solid var(--border-glass); }
+        .sound-header-row { display: flex; justify-content: space-between; align-items: center; }
+        .sound-upload-row { display: flex; align-items: center; gap: 10px; background: var(--input-bg); padding: 8px 12px; border-radius: 12px; }
+        .btn-test { background: var(--success-color); border: none; color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; font-weight: bold; transition: transform 0.2s, filter 0.2s; }
+        .btn-test:active { transform: scale(0.9); filter: brightness(0.8); }
+
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--input-bg); transition: .4s cubic-bezier(0.34, 1.2, 0.64, 1); border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s cubic-bezier(0.34, 1.2, 0.64, 1); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--success-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Perfis de Produtividade & Stats */
+        .prof-input { width: 100%; padding: 12px; background: var(--card-bg); border: 1px solid var(--border-glass); border-radius: 12px; color: var(--text-color); font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+        .prof-input:focus { border-color: var(--task-accent); }
+        .profile-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--card-bg); border: 1px solid var(--border-glass); border-radius: 16px; cursor: pointer; transition: transform 0.2s, background 0.3s; margin-bottom: 10px; }
+        .profile-card:active { transform: scale(0.95); }
+        .profile-card .prof-info { display: flex; flex-direction: column; gap: 4px; pointer-events: none; }
+        .profile-card .prof-title { font-weight: 800; font-size: 1rem; }
+        .profile-card .prof-desc { font-size: 0.75rem; opacity: 0.6; font-weight: 600; text-transform: uppercase; }
+        .prof-del-btn { background: var(--danger-color); color: white; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .prof-del-btn:active { transform: scale(0.9); }
+        .prof-fields { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+        .stat-card { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--card-bg); border: 1px solid var(--border-glass); border-radius: 16px; padding: 20px 10px; flex: 1; text-align: center; }
+        .stat-val { font-size: 1.8rem; font-weight: 900; color: var(--accent-color); }
+        .stat-lbl { font-size: 0.75rem; font-weight: 700; opacity: 0.7; margin-top: 5px; text-transform: uppercase; }
+
+        .finish-modal { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 240px; background: var(--modal-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--border-glass); border-radius: 32px; padding: 30px; text-align: center; z-index: 1000; display: none; box-shadow: 0 25px 60px rgba(0,0,0,0.4); color: var(--text-color);
+            animation: popIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+        }
+        @keyframes popIn {
+            from { transform: translate(-50%, -40%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        #task-list-input { width: 100%; height: 150px; background: var(--input-bg); border: 1px solid var(--border-glass); border-radius: 15px; color: var(--text-color); padding: 15px; font-size: 1rem; resize: none; outline: none; font-family: inherit; transition: border-color 0.3s; }
+        #task-list-input:focus { border-color: var(--task-accent); }
+        
+        .confirm-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s ease forwards; }
+        .confirm-box { background: var(--modal-bg); padding: 30px; border-radius: 30px; text-align: center; width: 260px; border: 1px solid var(--border-glass); color: var(--text-color); animation: popIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards; }
+        
+        .quick-edit-input { width:80px; height:70px; font-size:2.5rem; background: var(--input-bg); border:1px solid var(--border-glass); border-radius:15px; color: var(--text-color); text-align:center; font-weight: 900; transition: transform 0.2s, border-color 0.3s; }
+        .quick-edit-input:focus { transform: scale(1.05); border-color: var(--task-accent); outline: none; }
+        
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px); background: var(--accent-color); color: white; padding: 12px 24px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; z-index: 3000; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); opacity: 0; animation: dropDown 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards; }
+        @keyframes dropDown { to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+
+        /* ==========================================
+           OMNISCIENT HUD (FOCUS MODE) STYLES
+           ========================================== */
+        #omniscient-hud {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+            color: var(--text-color);
+        }
+
+        #omniscient-hud.hud-visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+
+        .hud-drag-area {
+            display: flex;
+            flex-direction: column;
+            cursor: move;
+            padding-right: 15px;
+        }
+
+        .hud-label { font-size: 0.7rem; font-weight: 800; color: var(--task-accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;}
+        .hud-time { font-size: 2.2rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; transition: color 0.3s ease;}
+        .hud-sub { font-size: 0.7rem; opacity: 0.7; font-weight: 600; margin-top: 2px;}
+        
+        .hud-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border-left: 1px solid var(--border-glass);
+            padding-left: 15px;
+        }
+
+        .hud-btn {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.3s ease;
+        }
+        .hud-btn:active { transform: scale(0.9); }
+        .hud-btn.hud-play { background: var(--task-accent); color: white; border: none; }
+        .hud-btn.hud-exit { background: var(--danger-color); color: white; border: none; }
+
+        @media (max-width: 600px) {
+            #omniscient-hud { bottom: 20px; right: 15px; left: 15px; justify-content: space-between; }
+            .hud-drag-area { padding-right: 0; }
+            .hud-actions { padding-left: 10px; gap: 5px; }
+            .hud-btn { width: 36px; height: 36px; }
+        }
+    </style>
+</head>
+<body class="theme-dark">
+
+    <div id="toast">Notificações Ativas 🔔</div>
+
+    <div id="floating-timer">
+        <div class="panel-mask" id="global-mask" onclick="closeAllPanels()"></div>
+
+        <!-- Botão Exclusivo Sair do Foco Extremo -->
+        <div class="btn-extreme-exit-container">
+            <button class="icon-btn" style="background:var(--danger-color); border:none; color:white; font-weight:bold; font-size:0.8rem; padding:10px 20px; border-radius:20px;" onclick="toggleExtremeFocus()">
+                SAIR DO FOCO
+            </button>
+        </div>
+
+        <div class="top-right-btns">
+            <!-- Botão Control Hub Unificado -->
+            <button class="icon-btn" id="control-hub-btn" onclick="toggleControlHub()" title="Menu Central">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="handle" id="drag-handle"></div>
+
+        <div class="mode-selector">
+            <div class="mode-item active" onclick="setMode('chrono')">CRONO</div>
+            <div class="mode-item" onclick="setMode('countdown')">REGRESS</div>
+            <div class="mode-item" onclick="setMode('pomodoro')">POMO</div>
+            <div class="mode-item" onclick="setMode('tasks')">TAREFAS</div>
+        </div>
+
+        <div class="content">
+            <div id="label-display" class="task-label">INICIAR</div>
+            <div id="time-display" class="timer-display" onclick="openQuickEdit()">00:00<span class="centiseconds">.00</span></div>
+            <div id="status-display" class="status-notification">Pronto para começar</div>
+            <div class="controls">
+                <button class="btn" onclick="resetTimer()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
+                <button class="btn btn-play" id="btn-start" onclick="toggleTimer()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="btn" id="btn-task-list" onclick="toggleTaskEditor()" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="finish-modal" id="finish-modal">
+            <h2 style="margin-bottom: 15px;">⏰ Tempo Finalizado!</h2>
+            <button class="btn-ok btn-action" style="background:var(--task-accent); color:white;" onclick="closeFinishModal()">OK</button>
+        </div>
+
+        <!-- PAINEL CONTROL HUB -->
+        <div class="overlay-panel" id="control-hub-panel">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span style="font-weight:900; font-size:1.1rem; letter-spacing:1px;">CONTROL HUB</span>
+                <button class="icon-btn" style="background:var(--input-bg); color:var(--text-color); border:none; padding:8px; border-radius:12px; width:36px; height:36px;" onclick="closeAllPanels()">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <div class="setting-label">AÇÕES RÁPIDAS</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 20px;">
+                <button class="btn-action" style="background:var(--task-accent); color:white; height: 45px; font-size:0.8rem;" onclick="toggleTimer(); closeAllPanels();">Start / Pause</button>
+                <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="resetTimer(); closeAllPanels();">Resetar</button>
+                <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="toggleExtremeFocus(); closeAllPanels();">Foco Extremo</button>
+                <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); height: 45px; font-size:0.8rem;" onclick="toggleOmniscientFocus(); closeAllPanels();">Modo HUD</button>
+            </div>
+
+            <div class="setting-label">NAVEGAÇÃO</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom: 20px;">
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleStatsPanel()">Progresso</button>
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleProfilesPanel()">Perfis</button>
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleSoundPanel()">Sons</button>
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleTaskEditor()">Tarefas</button>
+                <button class="btn-action" style="background:var(--card-bg); color:var(--text-color); height: 45px; font-size:0.7rem; border:1px solid var(--border-glass);" onclick="toggleWindowMode(); closeAllPanels();">Janela</button>
+            </div>
+
+            <div class="setting-label">APARÊNCIA</div>
+            <div class="setting-item" style="background:var(--card-bg); padding:15px; border-radius:16px; border:1px solid var(--border-glass); margin-bottom: 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <span style="font-size:0.85rem; font-weight:700;">Tema Visual</span>
+                    <select id="theme-select" onchange="updateTheme(this.value)" style="padding:8px 12px; border-radius:10px; background:var(--input-bg); color:var(--text-color); border:1px solid var(--border-glass); outline:none; font-weight:bold;">
+                        <option value="theme-dark">Deep Dark</option>
+                        <option value="theme-light">Pure Light</option>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:0.85rem; font-weight:700;">Opacidade: <span id="opacity-val">100</span>%</span>
+                    <button class="icon-btn" id="btn-auto-opacity" style="background:none; border:none; color:var(--task-accent); font-weight:900; font-size:0.8rem; padding:0;" onclick="toggleAutoOpacity()">AUTO: ON</button>
+                </div>
+                <input type="range" id="opacity-slider" min="10" max="100" value="100" oninput="manualUpdateOpacity(this.value)" style="width:100%;">
+            </div>
+        </div>
+
+        <!-- Painel Estatísticas (Gamificação) -->
+        <div class="overlay-panel" id="stats-panel">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span>SEU PROGRESSO</span>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 15px;">
+                <div class="stat-card">
+                    <span class="stat-val" id="stat-sessions">0</span>
+                    <span class="stat-lbl">Sessões<br>Concluídas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val" id="stat-streak" style="color:var(--warning-color);">0</span>
+                    <span class="stat-lbl">Dias de<br>Ofensiva 🔥</span>
+                </div>
+            </div>
+            <div class="stat-card" style="margin-bottom: 5px;">
+                <span class="stat-val" id="stat-time" style="color:var(--success-color);">0h 0m</span>
+                <span class="stat-lbl">Tempo Total em Foco (Todos Modos)</span>
+            </div>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); margin-top: 10px;" onclick="toggleControlHub()">VOLTAR AO MENU</button>
+        </div>
+
+        <!-- Painel Perfis -->
+        <div class="overlay-panel" id="profiles-panel">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span>PERFIS DE PRODUTIVIDADE</span>
+                <button class="icon-btn" style="background:var(--task-accent); color:white; border:none; padding:8px 12px; font-weight:800; font-size:0.7rem;" onclick="toggleProfileCreator()">+ NOVO</button>
+            </div>
+            <div id="profiles-list"></div>
+            <div id="profile-creator" style="display:none; flex-direction:column; gap:12px; background:rgba(0,0,0,0.2); padding:20px; border-radius:20px; border:1px solid var(--border-glass);">
+                <span class="setting-label">CRIAR PERFIL</span>
+                <input type="text" id="prof-name" placeholder="Ex: Meditação" class="prof-input">
+                <select id="prof-type" onchange="updateProfileFields()" class="prof-input">
+                    <option value="pomodoro">Estilo Pomodoro</option>
+                    <option value="countdown">Timer Regressivo</option>
+                    <option value="tasks">Lista de Tarefas</option>
+                </select>
+                <div id="prof-fields-pomodoro" class="prof-fields">
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="prof-pomo-w" placeholder="Foco (m)" value="25" class="prof-input">
+                        <input type="number" id="prof-pomo-b" placeholder="Pausa (m)" value="5" class="prof-input">
+                    </div>
+                </div>
+                <div id="prof-fields-countdown" class="prof-fields" style="display:none;">
+                    <input type="number" id="prof-count-m" placeholder="Duração em Minutos" value="90" class="prof-input">
+                </div>
+                <div id="prof-fields-tasks" class="prof-fields" style="display:none;">
+                    <textarea id="prof-tasks-text" placeholder="Ex:&#10;Aquecimento 5m&#10;Treino 45m" class="prof-input" style="height:80px; resize:none;"></textarea>
+                </div>
+                <button class="btn-action" style="background:var(--success-color); color:white; height: 45px; margin-top:5px;" onclick="saveNewProfile()">SALVAR PERFIL</button>
+            </div>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); margin-top: 10px;" onclick="toggleControlHub()">VOLTAR AO MENU</button>
+        </div>
+
+        <!-- Outros Painéis... -->
+        <div class="overlay-panel" id="sound-panel">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span>SONS PREMIUM</span></div>
+            <div class="sound-row-container"><div class="sound-header-row"><span class="setting-label">Alerta 30s</span><label class="switch"><input type="checkbox" id="toggle-30s" onchange="toggleSoundState('mute30s', this.checked)"><span class="slider"></span></label></div><div class="sound-upload-row"><span>Sintético Moderno</span><button class="btn-test" onclick="playSound('30s', true)">Testar</button></div></div>
+            <div class="sound-row-container"><div class="sound-header-row"><span class="setting-label">Alerta 10s</span><label class="switch"><input type="checkbox" id="toggle-10s" onchange="toggleSoundState('mute10s', this.checked)"><span class="slider"></span></label></div><div class="sound-upload-row"><span>Sintético Crystal</span><button class="btn-test" onclick="playSound('10s', true)">Testar</button></div></div>
+            <div class="sound-row-container"><div class="sound-header-row"><span class="setting-label">Som Final</span><label class="switch"><input type="checkbox" id="toggle-end" onchange="toggleSoundState('muteEnd', this.checked)"><span class="slider"></span></label></div><div class="sound-upload-row"><span>Harmonia Final</span><button class="btn-test" onclick="playSound('end', true)">Testar</button></div></div>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color); margin-top: 10px;" onclick="toggleControlHub()">VOLTAR AO MENU</button>
+        </div>
+
+        <div class="overlay-panel" id="task-editor">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span>LISTA DE TAREFAS</span><button class="icon-btn" style="background:var(--danger-color); color:white; border:none; padding:8px 12px; border-radius:10px; font-weight:800; font-size:0.7rem;" onclick="showConfirmClear()">LIMPAR</button></div>
+            <textarea id="task-list-input" placeholder="Exemplo:&#10;Aquecimento 5m&#10;Treino Pesado 45m"></textarea>
+            <button class="btn-action" style="background:var(--task-accent); color:white;" onclick="saveTasksFromInput()">SALVAR LISTA</button>
+            <button class="btn-action" style="background:var(--input-bg); color:var(--text-color);" onclick="toggleControlHub()">VOLTAR AO MENU</button>
+        </div>
+
+        <div class="overlay-panel" id="quick-edit">
+            <div class="panel-header"><span>DEFINIR TEMPO</span></div>
+            <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin:20px 0;"><input type="number" id="quick-min" value="0" class="quick-edit-input"><span style="font-size:2rem; font-weight: 900;">:</span><input type="number" id="quick-sec" value="0" class="quick-edit-input"></div>
+            <button class="btn-action" style="background:var(--task-accent); color:white;" onclick="applyQuickEdit()">APLICAR</button>
+        </div>
+
+        <div id="confirm-clear" class="confirm-overlay">
+            <div class="confirm-box">
+                <h2 style="margin-bottom: 20px;">APAGAR LISTA?</h2>
+                <div style="display:flex; gap:10px;"><button class="btn-action" style="flex:1; background:var(--danger-color); color:white;" onclick="confirmClear(true)">SIM</button><button class="btn-action" style="flex:1; background:var(--input-bg); color:var(--text-color);" onclick="confirmClear(false)">NÃO</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OMNISCIENT FOCUS HUD -->
+    <div id="omniscient-hud">
+        <div class="hud-drag-area" id="hud-drag-handle">
+            <span id="hud-label" class="hud-label">MODO</span>
+            <span id="hud-time" class="hud-time">00:00</span>
+            <span id="hud-sub" class="hud-sub">Status</span>
+        </div>
+        <div class="hud-actions">
+            <button class="hud-btn hud-play" id="hud-btn-play" onclick="toggleTimer()">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <button class="hud-btn" onclick="restoreFromHUD()" title="Expandir App">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+            <button class="hud-btn hud-exit" onclick="exitFocusModeHUD()" title="Sair do Focus Mode">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const taskColors = ['#007AFF', '#34C759', '#AF52DE', '#FF9500', '#5856D6', '#FF2D55', '#64D2FF'];
+        
+        let state = {
+            mode: 'chrono', extremeFocus: false,
+            focusModeEnabled: false, hudActive: false, finishQueue: [],
+            theme: 'theme-dark', tasks: [],
+            isWindowed: false, top: '100px', left: '100px', opacity: 100,
+            autoOpacityEnabled: true, mute30s: false, mute10s: false, muteEnd: false,
+            
+            pomodoroSettings: { work: 25, break: 5 },
+            
+            profiles: [
+                { id: 'p_study', name: '📚 Estudo Focado', type: 'pomodoro', data: { work: 25, break: 5 } },
+                { id: 'p_deep', name: '🧠 Foco Profundo', type: 'countdown', data: { m: 90, s: 0 } },
+                { id: 'p_workout', name: '💪 Treino HIIT', type: 'tasks', data: { tasks: "Aquecimento 5m\nSprints 20m\nDescanso 5m" } }
+            ],
+
+            timers: {
+                chrono: { elapsedTime: 0, status: 'stopped' },
+                countdown: { elapsedTime: 0, status: 'stopped' },
+                pomodoro: { elapsedTime: 0, status: 'stopped', phase: 'work' },
+                tasks: { elapsedTime: 0, status: 'stopped', index: 0 }
+            },
+
+            stats: {
+                sessionsCompleted: 0, totalFocusTime: 0, streak: 0, lastDate: null
+            }
+        };
+
+        const PWAManager = {
+            init() { this.injectManifest(); this.registerServiceWorker(); },
+            injectManifest() {
+                const manifest = { name: "Timer Flutuante Pro", short_name: "Timer Pro", description: "Sistema Multitimer de alta precisão", start_url: window.location.href.split('?')[0], display: "standalone", background_color: "#0f0f0f", theme_color: "#007AFF", icons: [{ src: "https://cdn-icons-png.flaticon.com/512/865/865969.png", sizes: "512x512", type: "image/png", purpose: "any maskable" }] };
+                const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }); const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(blob); document.head.appendChild(link);
+            },
+            registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    const swCode = `const CACHE_NAME = 'timer-pro-pwa-v1'; const ASSETS = [ location.origin + location.pathname ]; self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))); }); self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => { if (key !== CACHE_NAME) return caches.delete(key); })))); }); self.addEventListener('fetch', event => { event.respondWith(caches.match(event.request).then(cached => { return cached || fetch(event.request).then(response => { if(!response || response.status !== 200 || response.type !== 'basic') return response; const responseToCache = response.clone(); caches.open(CACHE_NAME).then(cache => { cache.put(event.request, responseToCache); }); return response; }).catch(() => new Response('App Offline')); })); });`;
+                    const blob = new Blob([swCode], { type: 'application/javascript' }); navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+                }
+            }
+        };
+
+        const NotificationManager = {
+            instances: {}, lastContent: {},
+            async init() { if ("Notification" in window) { const permission = await Notification.requestPermission(); if (permission === 'granted') UIController.showToast("Notificações Ativas 🔔"); } },
+            updateSystem() {
+                if (!("Notification" in window) || Notification.permission !== 'granted') return;
+                Object.keys(state.timers).forEach(mode => {
+                    const timer = state.timers[mode];
+                    if (timer.status === 'running') {
+                        const timeStr = this.formatTime(timer.elapsedTime); const label = this.getModeLabel(mode);
+                        const title = mode === 'chrono' ? `${label}: ${timeStr}` : `${label}: ${timeStr} restante`;
+                        const sec = Math.floor(timer.elapsedTime / 1000);
+                        const updateInterval = sec > 60 ? 15 : 5;
+                        
+                        if (sec % updateInterval === 0 || !this.instances[mode]) {
+                            if (this.lastContent[mode] !== title) {
+                                this.lastContent[mode] = title;
+                                const options = { body: 'Em background', icon: 'https://cdn-icons-png.flaticon.com/512/865/865969.png', silent: true, tag: `active-${mode}`, renotify: false };
+                                this.instances[mode] = new Notification(title, options);
+                            }
+                        }
+                    } else { this.closeInstance(mode); }
+                });
+            },
+            sendAlert(msg, urgent = false, mode = 'geral') {
+                const label = this.getModeLabel(mode);
+                if ("Notification" in window && Notification.permission === 'granted') { new Notification(`${label}`, { body: msg, tag: `alert-${mode}`, icon: 'https://cdn-icons-png.flaticon.com/512/865/865969.png', requireInteraction: urgent }); } 
+                else { UIController.showToast(`${label}: ${msg}`); }
+            },
+            closeInstance(mode) { if (this.instances[mode]) { this.instances[mode].close(); this.instances[mode] = null; this.lastContent[mode] = null; } },
+            formatTime(tMs) { const t = Math.floor(tMs / 1000), m = String(Math.floor(t / 60)).padStart(2, '0'), s = String(t % 60).padStart(2, '0'); return `${m}:${s}`; },
+            getModeLabel(mode) { const labels = { chrono: "Crono", countdown: "Regressivo", pomodoro: "Pomodoro", tasks: "Tarefas" }; return labels[mode] || mode; }
+        };
+
+        const SoundEngine = {
+            ctx: null, ensureInit() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); },
+            play(type, isTest = false) {
+                if (!isTest) { if (type === '30s' && state.mute30s) return; if (type === '10s' && state.mute10s) return; if (type === 'end' && state.muteEnd) return; }
+                this.ensureInit(); const now = this.ctx.currentTime, ctx = this.ctx;
+                if (type === '30s') { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(523.25, now); o.frequency.exponentialRampToValueAtTime(261.63, now + 0.15); g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(0.2, now + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + 0.3); o.connect(g); g.connect(ctx.destination); o.start(); o.stop(now + 0.3); } 
+                else if (type === '10s') { [0, 0.1].forEach(d => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(1567, now + d); g.gain.setValueAtTime(0, now + d); g.gain.linearRampToValueAtTime(0.1, now + d + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, now + d + 0.2); o.connect(g); g.connect(ctx.destination); o.start(now+d); o.stop(now+d+0.2); }); } 
+                else if (type === 'end') { [523, 659, 783].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(f, now + i*0.1); g.gain.setValueAtTime(0, now + i*0.1); g.gain.linearRampToValueAtTime(0.2, now + i*0.1 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.1 + 0.5); o.connect(g); g.connect(ctx.destination); o.start(now+i*0.1); o.stop(now+i*0.1+0.5); }); }
+            }
+        };
+
+        const UIController = {
+            els: {},
+            init() { 
+                this.els.timer = document.getElementById('floating-timer'); this.els.display = document.getElementById('time-display'); this.els.label = document.getElementById('label-display'); this.els.status = document.getElementById('status-display'); this.els.startBtn = document.getElementById('btn-start'); this.els.mask = document.getElementById('global-mask'); this.els.toast = document.getElementById('toast'); 
+                
+                // Elementos HUD
+                this.els.hud = document.getElementById('omniscient-hud');
+                this.els.hudLabel = document.getElementById('hud-label');
+                this.els.hudTime = document.getElementById('hud-time');
+                this.els.hudSub = document.getElementById('hud-sub');
+                this.els.hudBtnPlay = document.getElementById('hud-btn-play');
+            },
+            showToast(msg) { this.els.toast.textContent = msg; this.els.toast.style.display = 'block'; this.els.toast.style.animation = 'none'; this.els.toast.offsetHeight; this.els.toast.style.animation = 'dropDown 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards'; setTimeout(() => this.els.toast.style.display = 'none', 3000); },
+            updateDisplay() {
+                const current = state.timers[state.mode]; const tMs = current.elapsedTime, t = Math.floor(tMs / 1000);
+                const m = String(Math.floor(t / 60)).padStart(2, '0'), s = String(t % 60).padStart(2, '0'), c = String(Math.floor((tMs % 1000) / 10)).padStart(2, '0');
+                if (state.mode !== 'chrono' && current.status !== 'stopped') { const totalSeconds = tMs / 1000; if (totalSeconds > 0 && totalSeconds <= 10) { this.els.display.classList.add('time-urgent'); this.els.display.style.color = ""; } else { this.els.display.classList.remove('time-urgent'); this.els.display.style.color = (totalSeconds > 10 && totalSeconds <= 30) ? "var(--warning-color)" : ""; } } 
+                else { this.els.display.classList.remove('time-urgent'); this.els.display.style.color = ""; }
+                this.els.display.innerHTML = state.isWindowed ? `${m}:${s}` : `${m}:${s}<span class="centiseconds">.${c}</span>`;
+                document.title = current.status === 'running' ? `(${m}:${s}) Timer Pro` : `Timer Flutuante Pro`;
+            },
+            updateStatusText() {
+                const current = state.timers[state.mode];
+                if (state.mode === 'chrono') { this.els.status.textContent = current.status === 'running' ? "Cronómetro ativo" : "Cronómetro pausado"; return; }
+                const sec = Math.ceil(current.elapsedTime / 1000);
+                if (current.status === 'stopped' && sec === 0) this.els.status.textContent = "Pronto para começar";
+                else if (sec <= 0) this.els.status.textContent = "Fim do tempo"; else if (sec <= 10) this.els.status.textContent = "🔔 10 segundos restantes"; else if (sec <= 30) this.els.status.textContent = "⚠️ 30 segundos restantes"; else this.els.status.textContent = `Faltam ${Math.floor(sec/60)}m ${sec%60}s`;
+            },
+            updateHUD() {
+                const current = state.timers[state.mode];
+                const tMs = current.elapsedTime;
+                const t = Math.floor(tMs / 1000);
+                const m = String(Math.floor(t / 60)).padStart(2, '0');
+                const s = String(t % 60).padStart(2, '0');
+                
+                this.els.hudTime.textContent = `${m}:${s}`;
+                
+                if (state.mode === 'chrono') {
+                    this.els.hudLabel.textContent = "CRONÓMETRO";
+                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                } else if (state.mode === 'countdown') {
+                    this.els.hudLabel.textContent = "REGRESSIVO";
+                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                } else if (state.mode === 'pomodoro') {
+                    this.els.hudLabel.textContent = current.phase === 'work' ? "FOCO 🔥" : "PAUSA ☕";
+                    this.els.hudSub.textContent = current.status === 'running' ? "A decorrer..." : "Pausado";
+                } else if (state.mode === 'tasks') {
+                    const task = state.tasks[state.timers.tasks.index];
+                    this.els.hudLabel.textContent = task ? task.name : "TAREFAS";
+                    this.els.hudSub.textContent = state.tasks.length > 0 ? `Tarefa ${state.timers.tasks.index + 1}/${state.tasks.length}` : "Nenhuma tarefa";
+                }
+
+                if (state.mode !== 'chrono' && current.status !== 'stopped') {
+                    const totalSeconds = tMs / 1000;
+                    if (totalSeconds > 0 && totalSeconds <= 10) { this.els.hudTime.style.color = "var(--danger-color)"; } 
+                    else if (totalSeconds > 10 && totalSeconds <= 30) { this.els.hudTime.style.color = "var(--warning-color)"; } 
+                    else { this.els.hudTime.style.color = ""; }
+                } else {
+                    this.els.hudTime.style.color = "";
+                }
+
+                this.els.hudBtnPlay.innerHTML = current.status === 'running' 
+                    ? '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>' 
+                    : '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+            },
+            update() {
+                const current = state.timers[state.mode]; let color = taskColors[0];
+                if (state.mode === 'tasks' && state.tasks.length > 0) color = taskColors[state.timers.tasks.index % taskColors.length];
+                else if (state.mode === 'pomodoro') color = state.timers.pomodoro.phase === 'work' ? '#FF3B30' : '#34C759';
+                
+                document.documentElement.style.setProperty('--task-accent', color); document.body.className = state.extremeFocus ? 'extreme-mode' : state.theme; document.getElementById('theme-select').value = state.theme;
+                document.querySelectorAll('.mode-item').forEach((e, i) => e.classList.toggle('active', state.mode === ['chrono', 'countdown', 'pomodoro', 'tasks'][i]));
+                
+                this.els.startBtn.innerHTML = current.status === 'running' ? '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg>';
+                
+                document.getElementById('btn-task-list').style.display = state.mode === 'tasks' ? 'flex' : 'none';
+                
+                if (state.mode === 'chrono') this.els.label.textContent = "CRONÓMETRO"; else if (state.mode === 'countdown') this.els.label.textContent = "REGRESSIVO"; else if (state.mode === 'pomodoro') this.els.label.textContent = state.timers.pomodoro.phase === 'work' ? "FOCO 🔥" : "PAUSA ☕"; else if (state.mode === 'tasks') this.els.label.textContent = state.tasks[state.timers.tasks.index] ? state.tasks[state.timers.tasks.index].name : "LISTA VAZIA";
+                document.getElementById('btn-auto-opacity').textContent = `AUTO: ${state.autoOpacityEnabled ? 'ON' : 'OFF'}`; document.getElementById('btn-auto-opacity').style.opacity = state.autoOpacityEnabled ? '1' : '0.5';
+
+                this.updateDisplay(); this.updateOpacity(state.opacity); 
+                
+                // Sincroniza HUD se ativo
+                if (state.hudActive) this.updateHUD();
+            },
+            updateOpacity(v) { state.opacity = v; document.documentElement.style.setProperty('--ui-opacity', v / 100); document.getElementById('opacity-val').textContent = v; },
+            syncToggles() { document.getElementById('toggle-30s').checked = !state.mute30s; document.getElementById('toggle-10s').checked = !state.mute10s; document.getElementById('toggle-end').checked = !state.muteEnd; },
+            setupDraggable() {
+                const h = document.getElementById('drag-handle'); let d = false, o = {x:0, y:0}; const timerEl = this.els.timer;
+                const s = (e) => { if(!state.isWindowed || state.extremeFocus) return; d = true; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; o = {x:cx - timerEl.offsetLeft, y:cy - timerEl.offsetTop}; };
+                const m = (e) => { if(!d) return; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; state.left = (cx - o.x)+'px'; state.top = (cy - o.y)+'px'; timerEl.style.left = state.left; timerEl.style.top = state.top; };
+                const e = () => d = false;
+                h.addEventListener('mousedown', s); h.addEventListener('touchstart', s, {passive: false}); window.addEventListener('mousemove', m); window.addEventListener('touchmove', m, {passive: false}); window.addEventListener('mouseup', e); window.addEventListener('touchend', e);
+            },
+            setupHUDDraggable() {
+                const h = document.getElementById('hud-drag-handle'); let d = false, o = {x:0, y:0}; const hudEl = this.els.hud;
+                const s = (e) => { if(e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return; d = true; const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; o = {x: cx - hudEl.offsetLeft, y: cy - hudEl.offsetTop}; };
+                const m = (e) => { if(!d) return; e.preventDefault(); const cx = e.touches ? e.touches[0].clientX : e.clientX, cy = e.touches ? e.touches[0].clientY : e.clientY; hudEl.style.bottom = 'auto'; hudEl.style.right = 'auto'; hudEl.style.left = (cx - o.x) + 'px'; hudEl.style.top = (cy - o.y) + 'px'; };
+                const e = () => d = false;
+                h.addEventListener('mousedown', s); h.addEventListener('touchstart', s, {passive: false}); window.addEventListener('mousemove', m); window.addEventListener('touchmove', m, {passive: false}); window.addEventListener('mouseup', e); window.addEventListener('touchend', e);
+            },
+            closeAllPanels() { document.querySelectorAll('.overlay-panel').forEach(e => e.style.display = 'none'); this.els.mask.style.display = 'none'; document.getElementById('confirm-clear').style.display = 'none'; },
+            togglePanel(id) { const p = document.getElementById(id), vis = p.style.display === 'flex'; this.closeAllPanels(); if (!vis) { p.style.display = 'flex'; this.els.mask.style.display = 'block'; } },
+            getQuickEditValues() { return { m: parseInt(document.getElementById('quick-min').value) || 0, s: parseInt(document.getElementById('quick-sec').value) || 0 }; },
+            getTaskListInput() { return document.getElementById('task-list-input').value; },
+            setTaskListInput(val) { document.getElementById('task-list-input').value = val; },
+            renderStats() {
+                const hours = Math.floor(state.stats.totalFocusTime / 3600000);
+                const minutes = Math.floor((state.stats.totalFocusTime % 3600000) / 60000);
+                document.getElementById('stat-time').textContent = `${hours}h ${minutes}m`;
+                document.getElementById('stat-sessions').textContent = state.stats.sessionsCompleted;
+                document.getElementById('stat-streak').textContent = state.stats.streak;
+            }
+        };
+
+        const TimerCore = {
+            lastTimestamp: 0,
+            alertsFired: { chrono: { s30: false, s10: false }, countdown: { s30: false, s10: false }, pomodoro: { s30: false, s10: false }, tasks: { s30: false, s10: false } },
+            initValues(forceReset = false, mode = state.mode) {
+                const current = state.timers[mode];
+                if (forceReset || current.elapsedTime === 0) {
+                    if (mode === 'chrono') current.elapsedTime = 0;
+                    else if (mode === 'countdown') { const vals = UIController.getQuickEditValues(); current.elapsedTime = (vals.m * 60 + vals.s) * 1000; } 
+                    else if (mode === 'pomodoro') { const pSettings = state.pomodoroSettings || { work: 25, break: 5 }; current.elapsedTime = (state.timers.pomodoro.phase === 'work' ? pSettings.work : pSettings.break) * 60 * 1000; } 
+                    else if (mode === 'tasks') { const t = state.tasks[state.timers.tasks.index]; current.elapsedTime = t ? t.duration : 0; }
+                    current.status = 'stopped'; this.alertsFired[mode] = { s30: false, s10: false }; StorageManager.save();
+                }
+                UIController.updateDisplay();
+                if (state.hudActive) UIController.updateHUD();
+            },
+            tick(timestamp) {
+                if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+                const delta = timestamp - this.lastTimestamp; let anyTimerUpdated = false;
+
+                Object.keys(state.timers).forEach(mode => {
+                    const timer = state.timers[mode];
+                    if (timer.status === 'running') {
+                        anyTimerUpdated = true;
+
+                        if (mode === 'chrono') timer.elapsedTime += delta;
+                        else {
+                            timer.elapsedTime -= delta; this.checkAlerts(mode, timer);
+                            if (timer.elapsedTime <= 0) { timer.elapsedTime = 0; this.timerFinished(mode, timer); }
+                        }
+                    }
+                });
+                
+                if (anyTimerUpdated) state.stats.totalFocusTime += delta;
+
+                if (anyTimerUpdated) {
+                    if (state.hudActive) {
+                        UIController.updateHUD();
+                    } else if (state.timers[state.mode].status === 'running') {
+                        UIController.updateDisplay(); UIController.updateStatusText();
+                    }
+                }
+                
+                if (anyTimerUpdated && Math.floor(timestamp / 1000) !== Math.floor(this.lastTimestamp / 1000)) NotificationManager.updateSystem();
+                
+                this.lastTimestamp = timestamp; requestAnimationFrame((ts) => this.tick(ts));
+            },
+            getTimeString() { const current = state.timers[state.mode], tMs = current.elapsedTime, t = Math.floor(tMs / 1000), m = String(Math.floor(t / 60)).padStart(2, '0'), s = String(t % 60).padStart(2, '0'); return `${m}:${s}`; },
+            getLabel() { if (state.mode === 'chrono') return "CRONÓMETRO"; if (state.mode === 'countdown') return "REGRESSIVO"; if (state.mode === 'pomodoro') return state.timers.pomodoro.phase === 'work' ? "FOCO" : "PAUSA"; if (state.mode === 'tasks') return state.tasks[state.timers.tasks.index]?.name || "TAREFA"; return ""; },
+            checkAlerts(mode, timer) {
+                const sec = timer.elapsedTime / 1000;
+                if (!this.alertsFired[mode].s30 && sec <= 30 && sec > 29) { this.alertsFired[mode].s30 = true; SoundEngine.play('30s'); NotificationManager.sendAlert(`⚠️ Restam 30s!`, false, mode); }
+                if (!this.alertsFired[mode].s10 && sec <= 10 && sec > 9) { this.alertsFired[mode].s10 = true; SoundEngine.play('10s'); NotificationManager.sendAlert(`🔔 Apenas 10s!`, false, mode); }
+            },
+            timerFinished(mode, timer) {
+                timer.status = 'finished'; SoundEngine.play('end'); NotificationManager.sendAlert(`⏰ TEMPO FINALIZADO!`, true, mode);
+                
+                if(mode !== 'chrono') { state.stats.sessionsCompleted++; this.updateStreak(); }
+
+                if (mode === state.mode) { 
+                    NotificationManager.closeInstance(mode); 
+                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(100); 
+                    
+                    if (!state.hudActive) {
+                        document.getElementById('finish-modal').style.display = 'block'; 
+                    } else {
+                        if (!state.finishQueue.includes(mode)) state.finishQueue.push(mode);
+                    }
+                }
+                
+                StorageManager.save();
+                
+                if (mode === 'tasks' && timer.index < state.tasks.length - 1) {
+                    timer.index++; setTimeout(() => { 
+                        if (mode === state.mode) closeFinishModal(); 
+                        const t = state.tasks[timer.index]; timer.elapsedTime = t ? t.duration : 0; this.alertsFired.tasks = { s30: false, s10: false }; timer.status = 'running';
+                        if (mode === state.mode) UIController.update(); 
+                    }, 2000);
+                }
+                if (mode === state.mode) UIController.update();
+            },
+            updateStreak() {
+                const today = new Date().toDateString();
+                if (state.stats.lastDate !== today) {
+                    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                    if (state.stats.lastDate === yesterday.toDateString()) { state.stats.streak++; } else { state.stats.streak = 1; }
+                    state.stats.lastDate = today;
+                }
+            },
+            toggle() {
+                SoundEngine.ensureInit(); const current = state.timers[state.mode];
+                if (current.status === 'running') { 
+                    current.status = 'paused'; 
+                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(100); 
+                    NotificationManager.closeInstance(state.mode); 
+                } 
+                else { 
+                    if (current.status === 'stopped' || current.status === 'finished') { this.alertsFired[state.mode] = { s30: false, s10: false }; this.initValues(true); } 
+                    current.status = 'running'; 
+                    if (state.autoOpacityEnabled && !state.extremeFocus && !state.hudActive) UIController.updateOpacity(40); 
+                    NotificationManager.updateSystem(); 
+                }
+                
+                if(!state.hudActive) {
+                    UIController.els.display.style.transform = 'scale(1.05)'; setTimeout(() => UIController.els.display.style.transform = '', 200);
+                }
+                
+                StorageManager.save(); UIController.update();
+            },
+            reset() {
+                const current = state.timers[state.mode]; current.status = 'stopped'; 
+                this.alertsFired[state.mode] = { s30: false, s10: false }; this.initValues(true); NotificationManager.closeInstance(state.mode); 
+                StorageManager.save(); UIController.update(); 
+            }
+        };
+
+        const StorageManager = {
+            save() { localStorage.setItem('timer_v4_pro_modern', JSON.stringify(state)); },
+            load() {
+                const deepMerge = (defaults, saved) => {
+                    if (typeof defaults !== 'object' || defaults === null || Array.isArray(defaults)) return saved ?? defaults;
+                    const result = { ...defaults };
+                    Object.keys(defaults).forEach(k => { result[k] = (saved && k in saved) ? deepMerge(defaults[k], saved[k]) : defaults[k]; });
+                    return result;
+                };
+                const s = localStorage.getItem('timer_v4_pro_modern');
+                if (s) {
+                    try {
+                        const parsed = JSON.parse(s);
+                        parsed.extremeFocus = false;
+                        parsed.hudActive = false;
+                        parsed.finishQueue = [];
+                        state = deepMerge(state, parsed);
+                    } catch(e) {
+                        console.warn('Timer: falha ao carregar estado salvo, usando defaults.', e);
+                    }
+                }
+            },
+            setupAutoSave() { window.addEventListener('beforeunload', () => this.save()); document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') this.save(); }); }
+        };
+
+        // ==========================================
+        // MÓDULO OMNISCIENT HUD E EVENTOS GLOBAIS
+        // ==========================================
+        function toggleOmniscientFocus() {
+            state.focusModeEnabled = !state.focusModeEnabled;
+            UIController.showToast(state.focusModeEnabled ? "👁️ Focus Inteligente Ativado" : "Focus Inteligente Desativado");
+            StorageManager.save();
+            UIController.update();
+        }
+
+        function activateHUD() {
+            if (!state.focusModeEnabled || state.hudActive) return;
+            state.hudActive = true;
+            UIController.els.timer.classList.add('hud-hidden');
+            UIController.els.hud.classList.add('hud-visible');
+            UIController.updateHUD();
+        }
+
+        function restoreFromHUD() {
+            state.hudActive = false;
+            UIController.els.hud.classList.remove('hud-visible');
+            UIController.els.timer.classList.remove('hud-hidden');
+            UIController.update();
+            
+            // Exibe modal e toast para cada timer finalizado no background
+            if (state.finishQueue.length > 0) {
+                const labels = { chrono: 'Cronómetro', countdown: 'Regressivo', pomodoro: 'Pomodoro', tasks: 'Tarefas' };
+                state.finishQueue.forEach(m => UIController.showToast(`⏰ ${labels[m] || m} finalizado!`));
+                state.finishQueue = [];
+                document.getElementById('finish-modal').style.display = 'block';
+            }
+        }
+
+        function exitFocusModeHUD() {
+            state.focusModeEnabled = false;
+            restoreFromHUD();
+            UIController.showToast("🛑 Focus Inteligente Desativado");
+            StorageManager.save();
+        }
+
+        // Listener de Ausência e Retorno (Trigger do Omniscient HUD)
+        window.addEventListener('blur', () => {
+            if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
+                activateHUD();
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
+                activateHUD();
+            }
+        });
+
+        // ==========================================
+        // MÓDULO DE PERFIS E CONTROL HUB
+        // ==========================================
+        function toggleControlHub() { UIController.togglePanel('control-hub-panel'); }
+        function toggleProfilesPanel() { UIController.togglePanel('profiles-panel'); renderProfiles(); }
+        
+        function renderProfiles() {
+            const list = document.getElementById('profiles-list');
+            list.innerHTML = state.profiles.map(p => { const isDefault = ['p_study', 'p_deep', 'p_workout'].includes(p.id); return `<div class="profile-card" onclick="applyProfile('${p.id}')"><div class="prof-info"><span class="prof-title">${p.name}</span><span class="prof-desc">${p.type}</span></div>${!isDefault ? `<button class="prof-del-btn" onclick="event.stopPropagation(); deleteProfile('${p.id}')">X</button>` : ''}</div>`; }).join('');
+        }
+        function applyProfile(id) {
+            const profile = state.profiles.find(p => p.id === id); if (!profile) return; const targetTimer = state.timers[profile.type];
+            if (targetTimer.status === 'running') { UIController.showToast(`⚠️ Modo "${profile.type}" em curso. Pause-o primeiro.`); return; }
+            if (profile.type === 'pomodoro') { state.pomodoroSettings = { work: profile.data.work, break: profile.data.break }; targetTimer.phase = 'work'; targetTimer.elapsedTime = profile.data.work * 60 * 1000; } 
+            else if (profile.type === 'countdown') { targetTimer.elapsedTime = (profile.data.m * 60 + profile.data.s) * 1000; document.getElementById('quick-min').value = profile.data.m; document.getElementById('quick-sec').value = profile.data.s; } 
+            else if (profile.type === 'tasks') { UIController.setTaskListInput(profile.data.tasks); state.tasks = parseTasksString(profile.data.tasks); targetTimer.index = 0; const t = state.tasks[0]; targetTimer.elapsedTime = t ? t.duration : 0; }
+            targetTimer.status = 'stopped'; TimerCore.alertsFired[profile.type] = { s30: false, s10: false };
+            setMode(profile.type); UIController.showToast(`✅ Perfil "${profile.name}" ativado!`); UIController.closeAllPanels(); StorageManager.save();
+        }
+        function toggleProfileCreator() { const creator = document.getElementById('profile-creator'); creator.style.display = creator.style.display === 'none' ? 'flex' : 'none'; }
+        function updateProfileFields() { const type = document.getElementById('prof-type').value; document.querySelectorAll('.prof-fields').forEach(el => el.style.display = 'none'); document.getElementById(`prof-fields-${type}`).style.display = 'flex'; }
+        function saveNewProfile() {
+            const name = document.getElementById('prof-name').value.trim(); if (!name) { UIController.showToast("⚠️ Insira um nome."); return; }
+            const type = document.getElementById('prof-type').value; let data = {};
+            if (type === 'pomodoro') { data.work = parseInt(document.getElementById('prof-pomo-w').value) || 25; data.break = parseInt(document.getElementById('prof-pomo-b').value) || 5; } else if (type === 'countdown') { data.m = parseInt(document.getElementById('prof-count-m').value) || 0; data.s = 0; } else if (type === 'tasks') { data.tasks = document.getElementById('prof-tasks-text').value; if (!data.tasks.trim()) { UIController.showToast("⚠️ Lista vazia."); return; } }
+            state.profiles.push({ id: 'p_' + Date.now(), name, type, data }); StorageManager.save(); document.getElementById('prof-name').value = ''; toggleProfileCreator(); renderProfiles(); UIController.showToast("✅ Novo Perfil criado!");
+        }
+        function deleteProfile(id) { state.profiles = state.profiles.filter(p => p.id !== id); StorageManager.save(); renderProfiles(); }
+        function parseTasksString(inputStr) { const lines = inputStr.split('\n'); let nt = []; lines.forEach(l => { if(!l.trim()) return; let d = 60000, n = l; const m = l.match(/(\d+)\s*(s|m)/i); if(m) { d = m[2].toLowerCase()==='s' ? m[1]*1000 : m[1]*60000; n = l.replace(m[0], '').trim(); } nt.push({name: n || "Tarefa", duration: d}); }); return nt; }
+
+        // ==========================================
+        // API PÚBLICA / HELPERS
+        // ==========================================
+        function toggleExtremeFocus() {
+            state.extremeFocus = !state.extremeFocus;
+            if (state.extremeFocus && state.timers[state.mode].status !== 'running') toggleTimer(); 
+            if (state.extremeFocus) {
+                if (state.hudActive) restoreFromHUD(); // Force close HUD se estiver no modo Extremo
+                UIController.showToast("🎯 Foco Extremo Ativado!");
+            }
+            UIController.update();
+        }
+        
+        function toggleStatsPanel() { UIController.renderStats(); UIController.togglePanel('stats-panel'); }
+        function playSound(type, isTest) { SoundEngine.play(type, isTest); }
+        function toggleTimer() { TimerCore.toggle(); }
+        function resetTimer() { TimerCore.reset(); }
+        
+        function setMode(m) { 
+            if (state.mode === m) return;
+            state.mode = m; const current = state.timers[m];
+            if (current.elapsedTime === 0 && m !== 'chrono') TimerCore.initValues();
+            if (current.status === 'running' && state.autoOpacityEnabled && !state.extremeFocus) UIController.updateOpacity(40); else if (state.autoOpacityEnabled && !state.extremeFocus) UIController.updateOpacity(100);
+            StorageManager.save(); UIController.update(); 
+        }
+
+        function toggleWindowMode() { state.isWindowed = !state.isWindowed; UIController.els.timer.classList.toggle('windowed', state.isWindowed); UIController.update(); StorageManager.save(); }
+        function closeAllPanels() { UIController.closeAllPanels(); document.getElementById('profile-creator').style.display = 'none'; }
+        function toggleSoundPanel() { UIController.togglePanel('sound-panel'); }
+        function toggleTaskEditor() { UIController.togglePanel('task-editor'); }
+        function openQuickEdit() { if (state.mode !== 'chrono') UIController.togglePanel('quick-edit'); }
+        
+        function applyQuickEdit() { state.timers[state.mode].status = 'stopped'; TimerCore.initValues(true); UIController.update(); UIController.closeAllPanels(); }
+        function closeFinishModal() { document.getElementById('finish-modal').style.display = 'none'; }
+        function manualUpdateOpacity(v) { state.autoOpacityEnabled = false; UIController.updateOpacity(v); UIController.update(); StorageManager.save(); }
+        function toggleAutoOpacity() { state.autoOpacityEnabled = !state.autoOpacityEnabled; UIController.update(); StorageManager.save(); }
+        function toggleSoundState(key, isChecked) { state[key] = !isChecked; StorageManager.save(); }
+        function showConfirmClear() { document.getElementById('confirm-clear').style.display = 'flex'; }
+        function confirmClear(choice) { document.getElementById('confirm-clear').style.display = 'none'; if (choice) { UIController.setTaskListInput(''); saveTasksFromInput(); } }
+        function updateTheme(t) { state.theme = t; UIController.update(); StorageManager.save(); }
+        
+        function saveTasksFromInput() {
+            const input = UIController.getTaskListInput(); state.tasks = parseTasksString(input); state.timers.tasks.index = 0; state.timers.tasks.status = 'stopped'; 
+            TimerCore.initValues(true); UIController.update(); UIController.closeAllPanels(); StorageManager.save();
+        }
+
+        window.onload = () => { 
+            PWAManager.init(); StorageManager.load(); StorageManager.setupAutoSave(); UIController.init(); 
+            UIController.setupDraggable(); UIController.setupHUDDraggable(); 
+            TimerCore.initValues(); UIController.update(); UIController.syncToggles(); NotificationManager.init(); 
+            TimerCore.lastTimestamp = performance.now(); requestAnimationFrame((ts) => TimerCore.tick(ts)); 
+        };
+    </script>
+</body>
+</html>
