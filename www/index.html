@@ -12,6 +12,10 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/865/865969.png">
     
     <title>Timer Flutuante Pro</title>
+    <!-- Capacitor SDK — só ativo dentro do APK -->
+    <script>
+        window._isCapacitor = (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform && Capacitor.isNativePlatform());
+    </script>
     <style>
         :root {
             --bg-glass: rgba(255, 255, 255, 0.08);
@@ -1505,23 +1509,49 @@
             UIController.update();
         }
 
-        // Sai do app → colapsa para HUD
-        window.addEventListener('blur', () => {
-            if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) activateHUD();
-        });
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden' && state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
-                activateHUD();
+        // ==========================================
+        // DETECÇÃO DE BACKGROUND — HÍBRIDO APK + BROWSER
+        // ==========================================
+        function setupBackgroundDetection() {
+            // Dentro do APK Capacitor — usa evento nativo appStateChange
+            if (window._isCapacitor) {
+                try {
+                    // Importa o plugin App do Capacitor dinamicamente
+                    const { App } = Capacitor.Plugins;
+                    if (App) {
+                        App.addListener('appStateChange', ({ isActive }) => {
+                            if (!isActive) {
+                                // App foi para background
+                                if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) activateHUD();
+                            } else {
+                                // App voltou ao foreground
+                                if (state.hudActive) restoreFromHUD();
+                            }
+                        });
+                        return; // usa só o nativo, não adiciona browser listeners
+                    }
+                } catch(e) {
+                    console.warn('Capacitor App plugin não disponível, usando fallback browser');
+                }
             }
-            // Volta ao app → restaura automaticamente
-            if (document.visibilityState === 'visible' && state.hudActive) {
-                restoreFromHUD();
-            }
-        });
-        // Foco retorna à janela → restaura
-        window.addEventListener('focus', () => {
-            if (state.hudActive) restoreFromHUD();
-        });
+
+            // Browser normal — usa blur/visibilitychange
+            window.addEventListener('blur', () => {
+                if (state.focusModeEnabled && !state.hudActive && !state.extremeFocus) activateHUD();
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden' && state.focusModeEnabled && !state.hudActive && !state.extremeFocus) {
+                    activateHUD();
+                }
+                if (document.visibilityState === 'visible' && state.hudActive) {
+                    restoreFromHUD();
+                }
+            });
+            window.addEventListener('focus', () => {
+                if (state.hudActive) restoreFromHUD();
+            });
+        }
+        setupBackgroundDetection();
 
         // ==========================================
         // MÓDULO DE PERFIS E CONTROL HUB
